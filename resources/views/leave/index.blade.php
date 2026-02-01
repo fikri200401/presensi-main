@@ -21,12 +21,14 @@
             </button>
         </form>
     </div>
-    <a href="{{ route('leave.create') }}" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700">
-        <svg class="-ml-1 mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-        </svg>
-        Add New
-    </a>
+    @can('create_leave')
+        <a href="{{ route('leave.create') }}" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700">
+            <svg class="-ml-1 mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
+            Add New
+        </a>
+    @endcan
 </div>
 
 <div class="bg-white shadow-sm rounded-lg border border-gray-200 overflow-hidden">
@@ -69,12 +71,25 @@
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                         <div class="flex gap-2">
-                            <a href="{{ route('leave.edit', $leave) }}" class="text-indigo-600 hover:text-indigo-900">Edit</a>
-                            <form method="POST" action="{{ route('leave.destroy', $leave) }}" class="inline" onsubmit="return confirm('Are you sure?')">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="text-red-600 hover:text-red-900">Delete</button>
-                            </form>
+                            @can('update_leave')
+                                @if(auth()->user()->hasRole(['super_admin', 'admin']) || $leave->user_id === auth()->id())
+                                    <a href="{{ route('leave.edit', $leave) }}" class="text-indigo-600 hover:text-indigo-900">Edit</a>
+                                @endif
+                            @endcan
+                            
+                            @can('delete_leave')
+                                @if(auth()->user()->hasRole(['super_admin', 'admin']))
+                                    <form method="POST" action="{{ route('leave.destroy', $leave) }}" class="inline" onsubmit="return confirm('Are you sure?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="text-red-600 hover:text-red-900">Delete</button>
+                                    </form>
+                                @endif
+                            @endcan
+                            
+                            @if(!auth()->user()->can('update_leave') && !auth()->user()->can('delete_leave'))
+                                <span class="text-gray-400">-</span>
+                            @endif
                         </div>
                     </td>
                 </tr>

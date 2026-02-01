@@ -17,12 +17,16 @@
             </button>
         </form>
     </div>
-    <a href="{{ route('attendance.create') }}" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-        <svg class="-ml-1 mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-        </svg>
-        Add New
-    </a>
+    @can('create_attendance')
+        @if(auth()->user()->hasRole(['super_admin', 'admin']))
+            <a href="{{ route('attendance.create') }}" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                <svg class="-ml-1 mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                </svg>
+                Add New
+            </a>
+        @endif
+    @endcan
 </div>
 
 <div class="bg-white shadow-sm rounded-lg border border-gray-200 overflow-hidden">
@@ -52,7 +56,7 @@
                         </div>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        {{ $attendance->schedule->shift->name ?? 'N/A' }}
+                        {{ $attendance->user->schedule->shift->name ?? 'N/A' }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         {{ $attendance->schedule_start_time }} - {{ $attendance->schedule_end_time }}
@@ -66,12 +70,25 @@
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                         <div class="flex gap-2">
-                            <a href="{{ route('attendance.edit', $attendance) }}" class="text-indigo-600 hover:text-indigo-900">Edit</a>
-                            <form method="POST" action="{{ route('attendance.destroy', $attendance) }}" class="inline" onsubmit="return confirm('Are you sure?')">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="text-red-600 hover:text-red-900">Delete</button>
-                            </form>
+                            @can('update_attendance')
+                                @if(auth()->user()->hasRole(['super_admin', 'admin']) || $attendance->user_id === auth()->id())
+                                    <a href="{{ route('attendance.edit', $attendance) }}" class="text-indigo-600 hover:text-indigo-900">Edit</a>
+                                @endif
+                            @endcan
+                            
+                            @can('delete_attendance')
+                                @if(auth()->user()->hasRole(['super_admin', 'admin']))
+                                    <form method="POST" action="{{ route('attendance.destroy', $attendance) }}" class="inline" onsubmit="return confirm('Are you sure?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="text-red-600 hover:text-red-900">Delete</button>
+                                    </form>
+                                @endif
+                            @endcan
+                            
+                            @if(!auth()->user()->can('update_attendance') && !auth()->user()->can('delete_attendance'))
+                                <span class="text-gray-400">-</span>
+                            @endif
                         </div>
                     </td>
                 </tr>

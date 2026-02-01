@@ -4,6 +4,49 @@
 @section('page-title', 'Dashboard')
 
 @section('content')
+
+<!-- Quick Check-in Button for Employee -->
+@if(!auth()->user()->hasRole(['super_admin', 'admin']))
+<div class="mb-6">
+    <div class="bg-gradient-to-r from-indigo-500 to-purple-600 overflow-hidden shadow-lg rounded-lg border-4 border-indigo-300">
+        <div class="p-8">
+            <div class="flex flex-col md:flex-row items-center justify-between">
+                <div class="mb-4 md:mb-0">
+                    <h3 class="text-2xl font-bold text-white mb-2">📍 Presensi Hari Ini</h3>
+                    <p class="text-indigo-100 text-sm">
+                        @if($todayAttendance)
+                            @if($todayAttendance->end_time)
+                                ✅ Check-in: {{ $todayAttendance->start_time }} | Check-out: {{ $todayAttendance->end_time }}
+                            @else
+                                ⏰ Check-in: {{ $todayAttendance->start_time }} | Belum Check-out
+                            @endif
+                        @else
+                            ⚠️ Anda belum melakukan check-in hari ini
+                        @endif
+                    </p>
+                    <p class="text-indigo-200 text-xs mt-1">{{ now()->isoFormat('dddd, D MMMM YYYY') }}</p>
+                </div>
+                <div>
+                    <a href="{{ route('presensi') }}" class="inline-flex items-center px-6 py-3 bg-white text-indigo-600 font-bold text-lg rounded-lg shadow-lg hover:bg-indigo-50 transition transform hover:scale-105">
+                        <svg class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+                        </svg>
+                        @if(!$todayAttendance)
+                            Check In Sekarang
+                        @elseif(!$todayAttendance->end_time)
+                            Check Out Sekarang
+                        @else
+                            Lihat Presensi
+                        @endif
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@endif
+
 <!-- Stats -->
 <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
     <div class="bg-white overflow-hidden shadow-sm rounded-lg border border-gray-200">
@@ -129,7 +172,7 @@
                             </div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                            {{ $attendance->schedule->shift->name ?? 'N/A' }}
+                            {{ $attendance->user->schedule->shift->name ?? 'N/A' }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                             {{ $attendance->start_time ? \Carbon\Carbon::parse($attendance->start_time)->format('H:i') : '-' }}

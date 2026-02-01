@@ -14,9 +14,17 @@ class Presensi extends Component
     public $latitude;
     public $longitude;
     public $insideRadius = false;
+    
     public function render()
     {
         $schedule = Schedule::where('user_id', Auth::user()->id)->first();
+        
+        // Redirect admin/superadmin jika tidak punya schedule
+        if (!$schedule) {
+            session()->flash('error', 'Anda tidak memiliki jadwal kerja. Fitur presensi hanya untuk karyawan.');
+            return redirect()->route('dashboard');
+        }
+        
         $attendance = Attendance::where('user_id', Auth::user()->id)
                         ->whereDate('created_at', date('Y-m-d'))->first();
         return view('livewire.presensi',[
@@ -60,22 +68,24 @@ class Presensi extends Component
                     'start_latitude' => $this->latitude,
                     'start_longitude' => $this->longitude,
                     'start_time' => Carbon::now()->toTimeString(),
-                    'end_time' => Carbon::now()->toTimeString(),
+                    'end_time' => null,
                 ]);
+                session()->flash('success', '✅ Check-in berhasil! Selamat bekerja.');
             } else {
                 $attedance->update([
                     'end_latitude' => $this->latitude,
                     'end_longitude' => $this->longitude,
                     'end_time' => Carbon::now()->toTimeString(),
                 ]);
+                session()->flash('success', '✅ Check-out berhasil! Terima kasih atas kerja keras Anda hari ini.');
             }
 
-            return redirect('admin/attendances');
+            // Reset state
+            $this->insideRadius = false;
+            $this->latitude = null;
+            $this->longitude = null;
 
-            // return redirect()->route('presensi', [
-            //     'schedule' => $schedule,
-            //     'insideRadius' => false
-            // ]);
+            return redirect()->route('presensi');
         }
     }
 }

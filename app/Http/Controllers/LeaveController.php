@@ -12,6 +12,11 @@ class LeaveController extends Controller
     {
         $query = Leave::with('user');
 
+        // Employee hanya bisa lihat leave mereka sendiri
+        if (!auth()->user()->hasRole(['super_admin', 'admin'])) {
+            $query->where('user_id', auth()->id());
+        }
+
         if ($request->filled('search')) {
             $search = $request->search;
             $query->whereHas('user', function($q) use ($search) {

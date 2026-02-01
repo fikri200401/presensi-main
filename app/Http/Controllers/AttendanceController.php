@@ -11,7 +11,12 @@ class AttendanceController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Attendance::with(['user', 'schedule.shift', 'schedule.office']);
+        $query = Attendance::with(['user.schedule.shift', 'user.schedule.office']);
+
+        // Employee hanya bisa lihat attendance mereka sendiri
+        if (!auth()->user()->hasRole(['super_admin', 'admin'])) {
+            $query->where('user_id', auth()->id());
+        }
 
         if ($request->filled('search')) {
             $search = $request->search;

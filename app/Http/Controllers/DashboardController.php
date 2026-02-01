@@ -20,7 +20,7 @@ class DashboardController extends Controller
             'pending_leaves' => Leave::where('status', 'pending')->count(),
         ];
 
-        $recentAttendances = Attendance::with(['user', 'schedule.shift'])
+        $recentAttendances = Attendance::with(['user.schedule.shift', 'user.schedule.office'])
             ->latest()
             ->limit(10)
             ->get();
@@ -34,6 +34,14 @@ class DashboardController extends Controller
             ->orderBy('date')
             ->get();
 
-        return view('dashboard', compact('stats', 'recentAttendances', 'attendanceChart'));
+        // Get today's attendance for current employee
+        $todayAttendance = null;
+        if (!auth()->user()->hasRole(['super_admin', 'admin'])) {
+            $todayAttendance = Attendance::where('user_id', auth()->id())
+                ->whereDate('created_at', today())
+                ->first();
+        }
+
+        return view('dashboard', compact('stats', 'recentAttendances', 'attendanceChart', 'todayAttendance'));
     }
 }

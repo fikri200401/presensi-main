@@ -18,6 +18,13 @@
     
     <!-- Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/heroicons@2.0.18/24/outline/index.css">
+    
+    <!-- Leaflet CSS for GPS Map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" 
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" 
+          crossorigin="" />
+    
+    @livewireStyles
 </head>
 <body class="h-full" x-data="{ sidebarOpen: false }">
     <div class="min-h-full">
@@ -166,5 +173,6 @@
     </div>
 
     @stack('scripts')
+    @livewireScripts
 </body>
 </html>

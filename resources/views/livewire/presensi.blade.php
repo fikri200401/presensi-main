@@ -29,15 +29,25 @@
                  <div>
                      <h2 class="text-2xl font-bold mb-2">Presensi</h2>
                      <div id="map" class="mb-4 rounded-lg border border-gray-300" wire:ignore></div>
-                     @if (session()->has('error'))
-                        <div style="color: red; padding: 10px; border: 1px solid red; background-color: #fdd;">
-                            {{ session('error') }}
+                     
+                     @if (session()->has('success'))
+                        <div class="mb-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+                            <strong class="font-bold">Sukses!</strong>
+                            <span class="block sm:inline">{{ session('success') }}</span>
                         </div>
                     @endif
+                     
+                     @if (session()->has('error'))
+                        <div class="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                            <strong class="font-bold">Error!</strong>
+                            <span class="block sm:inline">{{ session('error') }}</span>
+                        </div>
+                    @endif
+                     
                      <form class="row g-3 mt-4" wire:submit="store" enctype="multipart/form-data">
-                         <button type="button" onclick="tagLocation()" class="px-4 py-2 bg-blue-500 text-white rounded">Tag Location</button>
+                         <button type="button" onclick="tagLocation()" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition">📍 Tag Location</button>
                          @if($insideRadius)
-                             <button type="submit" class="px-4 py-2 bg-green-500 text-white rounded">Submit Presensi</button>
+                             <button type="submit" class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition ml-2">✅ Submit Presensi</button>
                          @endif
                      </form>
                  </div>
