@@ -30,8 +30,8 @@ class DashboardController extends Controller
             DB::raw('COUNT(*) as count')
         )
             ->where('created_at', '>=', now()->subDays(7))
-            ->groupBy('date')
-            ->orderBy('date')
+            ->groupBy(DB::raw('DATE(created_at)'))
+            ->orderBy(DB::raw('DATE(created_at)'), 'ASC')
             ->get();
 
         // Get today's attendance for current employee

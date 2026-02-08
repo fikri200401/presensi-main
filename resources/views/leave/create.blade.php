@@ -11,12 +11,17 @@
             
             <div>
                 <label for="user_id" class="block text-sm font-medium text-gray-700">Employee</label>
-                <select id="user_id" name="user_id" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                    <option value="">Select Employee</option>
-                    @foreach($users as $user)
-                        <option value="{{ $user->id }}" {{ old('user_id') == $user->id ? 'selected' : '' }}>{{ $user->name }}</option>
-                    @endforeach
-                </select>
+                @if(auth()->user()->hasRole(['super_admin', 'admin']))
+                    <select id="user_id" name="user_id" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                        <option value="">Select Employee</option>
+                        @foreach($users as $user)
+                            <option value="{{ $user->id }}" {{ old('user_id') == $user->id ? 'selected' : '' }}>{{ $user->name }}</option>
+                        @endforeach
+                    </select>
+                @else
+                    <input type="text" value="{{ auth()->user()->name }}" readonly class="mt-1 block w-full rounded-md border-gray-300 bg-gray-100 shadow-sm sm:text-sm cursor-not-allowed">
+                    <input type="hidden" name="user_id" value="{{ auth()->id() }}">
+                @endif
                 @error('user_id')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
             </div>
 
@@ -40,15 +45,24 @@
                 @error('reason')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
             </div>
 
-            <div>
-                <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
-                <select id="status" name="status" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                    <option value="pending" {{ old('status') == 'pending' ? 'selected' : '' }}>Pending</option>
-                    <option value="approved" {{ old('status') == 'approved' ? 'selected' : '' }}>Approved</option>
-                    <option value="rejected" {{ old('status') == 'rejected' ? 'selected' : '' }}>Rejected</option>
-                </select>
-                @error('status')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
-            </div>
+            @if(auth()->user()->hasRole(['super_admin', 'admin']))
+                <div>
+                    <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
+                    <select id="status" name="status" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                        <option value="pending" {{ old('status') == 'pending' ? 'selected' : '' }}>Pending</option>
+                        <option value="approved" {{ old('status') == 'approved' ? 'selected' : '' }}>Approved</option>
+                        <option value="rejected" {{ old('status') == 'rejected' ? 'selected' : '' }}>Rejected</option>
+                    </select>
+                    @error('status')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
+                </div>
+            @else
+                <div>
+                    <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
+                    <input type="text" value="Pending" readonly class="mt-1 block w-full rounded-md border-gray-300 bg-gray-100 shadow-sm sm:text-sm cursor-not-allowed">
+                    <input type="hidden" name="status" value="pending">
+                    <p class="mt-1 text-sm text-gray-500">Your leave request will be reviewed by admin</p>
+                </div>
+            @endif
 
             <div class="flex items-center justify-end gap-3 pt-4 border-t border-gray-200">
                 <a href="{{ route('leave.index') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">

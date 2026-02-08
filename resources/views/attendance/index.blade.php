@@ -17,16 +17,22 @@
             </button>
         </form>
     </div>
-    @can('create_attendance')
-        @if(auth()->user()->hasRole(['super_admin', 'admin']))
+    @if(auth()->user()->hasRole(['super_admin', 'admin']))
+        <div class="flex gap-2">
+            <a href="{{ route('attendance.import.form') }}" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                <svg class="-ml-1 mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                </svg>
+                Import Absensi
+            </a>
             <a href="{{ route('attendance.create') }}" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                 <svg class="-ml-1 mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                 </svg>
                 Add New
             </a>
-        @endif
-    @endcan
+        </div>
+    @endif
 </div>
 
 <div class="bg-white shadow-sm rounded-lg border border-gray-200 overflow-hidden">

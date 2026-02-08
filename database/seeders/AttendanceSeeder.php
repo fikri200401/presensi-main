@@ -77,6 +77,7 @@ class AttendanceSeeder extends Seeder
 
                 Attendance::create([
                     'user_id' => $employee->id,
+                    'date' => $date->format('Y-m-d'),
                     'schedule_latitude' => $office->latitude,
                     'schedule_longitude' => $office->longitude,
                     'schedule_start_time' => $shift->start_time,

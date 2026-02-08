@@ -35,12 +35,24 @@ class LeaveController extends Controller
 
     public function create()
     {
-        $users = User::all();
+        // Admin dan Super Admin bisa memilih user, employee hanya untuk diri sendiri
+        $users = auth()->user()->hasRole(['super_admin', 'admin']) 
+            ? User::all() 
+            : User::where('id', auth()->id())->get();
+        
         return view('leave.create', compact('users'));
     }
 
     public function store(Request $request)
     {
+        // Jika employee, paksa user_id = auth user
+        if (!auth()->user()->hasRole(['super_admin', 'admin'])) {
+            $request->merge([
+                'user_id' => auth()->id(),
+                'status' => 'pending'
+            ]);
+        }
+
         $validated = $request->validate([
             'user_id' => 'required|exists:users,id',
             'start_date' => 'required|date',
@@ -51,17 +63,46 @@ class LeaveController extends Controller
 
         Leave::create($validated);
 
-        return redirect()->route('leave.index')->with('success', 'Leave created successfully');
+        return redirect()->route('leave.index')->with('success', 'Leave request created successfully');
     }
 
     public function edit(Leave $leave)
     {
-        $users = User::all();
+        // Employee hanya bisa edit leave mereka sendiri
+        if (!auth()->user()->hasRole(['super_admin', 'admin']) && $leave->user_id != auth()->id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        // Admin dan Super Admin bisa memilih user, employee hanya untuk diri sendiri
+        $users = auth()->user()->hasRole(['super_admin', 'admin']) 
+            ? User::all() 
+            : User::where('id', auth()->id())->get();
+            
         return view('leave.edit', compact('leave', 'users'));
     }
 
     public function update(Request $request, Leave $leave)
     {
+        // Employee hanya bisa update leave mereka sendiri
+        if (!auth()->user()->hasRole(['super_admin', 'admin']) && $leave->user_id != auth()->id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        // Jika employee, paksa user_id tetap sama dan status tidak berubah jika sudah approved/rejected
+        if (!auth()->user()->hasRole(['super_admin', 'admin'])) {
+            $request->merge([
+                'user_id' => $leave->user_id,  // Tidak bisa ganti user
+            ]);
+            
+            // Jika status sudah approved/rejected, employee tidak bisa mengubah
+            if (in_array($leave->status, ['approved', 'rejected'])) {
+                $request->merge(['status' => $leave->status]);
+            } else {
+                // Jika masih pending, tetap pending
+                $request->merge(['status' => 'pending']);
+            }
+        }
+
         $validated = $request->validate([
             'user_id' => 'required|exists:users,id',
             'start_date' => 'required|date',
@@ -72,12 +113,46 @@ class LeaveController extends Controller
 
         $leave->update($validated);
 
-        return redirect()->route('leave.index')->with('success', 'Leave updated successfully');
+        return redirect()->route('leave.index')->with('success', 'Leave request updated successfully');
     }
 
     public function destroy(Leave $leave)
     {
         $leave->delete();
         return redirect()->route('leave.index')->with('success', 'Leave deleted successfully');
+    }
+
+    public function approve(Leave $leave)
+    {
+        // Hanya admin/super_admin yang bisa approve
+        if (!auth()->user()->hasRole(['super_admin', 'admin'])) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $leave->update([
+            'status' => 'approved',
+            'note' => null
+        ]);
+
+        return redirect()->route('leave.index')->with('success', 'Leave request approved successfully');
+    }
+
+    public function reject(Request $request, Leave $leave)
+    {
+        // Hanya admin/super_admin yang bisa reject
+        if (!auth()->user()->hasRole(['super_admin', 'admin'])) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $validated = $request->validate([
+            'rejection_reason' => 'required|string|min:10'
+        ]);
+
+        $leave->update([
+            'status' => 'rejected',
+            'note' => $validated['rejection_reason']
+        ]);
+
+        return redirect()->route('leave.index')->with('success', 'Leave request rejected');
     }
 }

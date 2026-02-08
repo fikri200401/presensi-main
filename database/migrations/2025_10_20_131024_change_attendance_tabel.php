@@ -11,12 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('attendances', function (Blueprint $table) {
-            $table->renameColumn('latitude', 'start_latitude');
-            $table->renameColumn('longitude', 'start_longitude');
-            $table->double('end_latitude')->nullable();
-            $table->double('end_longitude')->nullable();
-        });
+        // Migration ini tidak diperlukan karena kolom sudah benar dari awal
+        // Schema::table('attendances', function (Blueprint $table) {
+        //     $table->renameColumn('latitude', 'start_latitude');
+        //     $table->renameColumn('longitude', 'start_longitude');
+        //     $table->double('end_latitude')->nullable();
+        //     $table->double('end_longitude')->nullable();
+        // });
     }
 
     /**
@@ -24,11 +25,11 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('attendances', function (Blueprint $table) {
-            $table->renameColumn('start_latitude', 'latitude');
-            $table->renameColumn('start_longitude', 'longitude');
-            $table->dropColumn('end_latitude');
-            $table->dropColumn('end_longitude');
-        });
+        // Schema::table('attendances', function (Blueprint $table) {
+        //     $table->renameColumn('start_latitude', 'latitude');
+        //     $table->renameColumn('start_longitude', 'longitude');
+        //     $table->dropColumn('end_latitude');
+        //     $table->dropColumn('end_longitude');
+        // });
     }
 };

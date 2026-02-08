@@ -17,8 +17,15 @@ class DatabaseSeeder extends Seeder
             OfficeSeeder::class,
             ShiftSeeder::class,
             ScheduleSeeder::class,
+            SalarySettingSeeder::class,
+            EmployeeSalarySeeder::class,
             AttendanceSeeder::class,
             LeaveSeeder::class,
+            PayrollSeeder::class,
         ]);
+        
+        $this->command->info('====================================');
+        $this->command->info('All seeders completed successfully!');
+        $this->command->info('====================================');
     }
 }

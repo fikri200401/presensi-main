@@ -13,6 +13,7 @@ class Attendance extends Model
 
     protected $fillable = [
         'user_id',
+        'date',
         'schedule_latitude',
         'schedule_longitude',
         'schedule_start_time',
