@@ -80,14 +80,14 @@
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Dari Tanggal</label>
-                        <input type="date" id="filterDateFrom" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                        <input type="date" id="filterDateFrom" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Sampai Tanggal</label>
-                        <input type="date" id="filterDateTo" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                        <input type="date" id="filterDateTo" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                     </div>
                     <div class="flex items-end gap-2">
-                        <button type="button" onclick="applyDateFilter()" class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">
+                        <button type="button" onclick="applyDateFilter()" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
                             <svg class="inline-block w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
                             </svg>
@@ -130,7 +130,7 @@
                         <thead class="bg-gray-50">
                             <tr>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    <input type="checkbox" id="selectAll" class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                                    <input type="checkbox" id="selectAll" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
                                 </th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100" onclick="sortTable('no')">
                                     <div class="flex items-center">
@@ -189,7 +189,7 @@
                                            name="attendance[{{ $data['row_index'] ?? $index }}][import]" 
                                            value="1" 
                                            {{ isset($data['error']) ? '' : 'checked' }}
-                                           class="row-checkbox rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                                           class="row-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500">
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="flex items-center">
@@ -204,7 +204,7 @@
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <input type="hidden" name="attendance[{{ $data['row_index'] ?? $index }}][user_id]" value="{{ $data['user_id'] ?? '' }}">
                                     <select name="attendance[{{ $data['row_index'] ?? $index }}][user_id_editable]" 
-                                            class="text-sm border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 {{ isset($data['error']) ? 'border-red-300' : '' }}"
+                                            class="text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 {{ isset($data['error']) ? 'border-red-300' : '' }}"
                                             onchange="this.previousElementSibling.value = this.value">
                                         <option value="">-- Pilih Karyawan --</option>
                                         @foreach(\App\Models\User::orderBy('name')->get() as $user)
@@ -221,19 +221,19 @@
                                     <input type="date" 
                                            name="attendance[{{ $data['row_index'] ?? $index }}][date]" 
                                            value="{{ $data['date'] ?? '' }}"
-                                           class="date-input text-sm border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 {{ isset($data['error']) && str_contains($data['error'], 'Tanggal') ? 'border-red-300' : '' }}">
+                                           class="date-input text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 {{ isset($data['error']) && str_contains($data['error'], 'Tanggal') ? 'border-red-300' : '' }}">
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <input type="time" 
                                            name="attendance[{{ $data['row_index'] ?? $index }}][check_in]" 
                                            value="{{ $data['check_in'] ?? '' }}"
-                                           class="text-sm border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 {{ isset($data['error']) && str_contains($data['error'], 'check in') ? 'border-red-300' : '' }}">
+                                           class="text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 {{ isset($data['error']) && str_contains($data['error'], 'check in') ? 'border-red-300' : '' }}">
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <input type="time" 
                                            name="attendance[{{ $data['row_index'] ?? $index }}][check_out]" 
                                            value="{{ $data['check_out'] ?? '' }}"
-                                           class="text-sm border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                                           class="text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                     <input type="hidden" name="attendance[{{ $data['row_index'] ?? $index }}][schedule_latitude]" value="{{ $data['schedule_latitude'] ?? '' }}">
@@ -259,14 +259,14 @@
                     </div>
                     <div class="flex gap-3">
                         <a href="{{ route('attendance.import.form') }}" 
-                           class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                           class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                             <svg class="-ml-1 mr-2 h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                             </svg>
                             Kembali
                         </a>
                         <button type="submit" 
-                                class="inline-flex items-center px-6 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                class="inline-flex items-center px-6 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                             <svg class="-ml-1 mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                             </svg>
@@ -475,7 +475,7 @@ function addNewRow() {
                    name="attendance[${newRowIndex}][import]" 
                    value="1" 
                    checked
-                   class="row-checkbox rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                   class="row-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500">
         </td>
         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
             ${newRowIndex + 1}
@@ -483,7 +483,7 @@ function addNewRow() {
         <td class="px-6 py-4 whitespace-nowrap">
             <input type="hidden" name="attendance[${newRowIndex}][user_id]" value="">
             <select name="attendance[${newRowIndex}][user_id_editable]" 
-                    class="text-sm border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                    class="text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                     onchange="this.previousElementSibling.value = this.value" required>
                 <option value="">-- Pilih Karyawan --</option>
                 @foreach(\App\Models\User::orderBy('name')->get() as $user)
@@ -495,21 +495,21 @@ function addNewRow() {
             <input type="date" 
                    name="attendance[${newRowIndex}][date]" 
                    value="${today}"
-                   class="date-input text-sm border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                   class="date-input text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                    required>
         </td>
         <td class="px-6 py-4 whitespace-nowrap">
             <input type="time" 
                    name="attendance[${newRowIndex}][check_in]" 
                    value="08:00"
-                   class="text-sm border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                   class="text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                    required>
         </td>
         <td class="px-6 py-4 whitespace-nowrap">
             <input type="time" 
                    name="attendance[${newRowIndex}][check_out]" 
                    value="17:00"
-                   class="text-sm border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                   class="text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
         </td>
         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
             <input type="hidden" name="attendance[${newRowIndex}][schedule_latitude]" value="">

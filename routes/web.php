@@ -15,6 +15,11 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\PayrollController;
 use App\Http\Controllers\EmployeeSalaryController;
 
+// Landing page (public)
+Route::get('/', function () {
+    return view('welcome');
+})->name('home');
+
 // Guest routes
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
@@ -23,7 +28,7 @@ Route::post('/login', [LoginController::class, 'login']);
 Route::middleware('auth')->group(function() {
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
     
-    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     
     Route::resource('attendance', AttendanceController::class);
     Route::get('attendance-import', [AttendanceController::class, 'showImportForm'])->name('attendance.import.form');
@@ -63,5 +68,10 @@ Route::middleware('auth')->group(function() {
     Route::get('attendance/export', function () {
         return Excel::download(new AttendanceExport, 'attendances.xlsx');
     })->name('attendance-export');
+
+    // Notification routes
+    Route::get('notifications', [\App\Http\Controllers\NotificationController::class, 'index'])->name('notifications.index');
+    Route::post('notifications/{notification}/read', [\App\Http\Controllers\NotificationController::class, 'markRead'])->name('notifications.read');
+    Route::post('notifications/read-all', [\App\Http\Controllers\NotificationController::class, 'markAllRead'])->name('notifications.read-all');
 });
 

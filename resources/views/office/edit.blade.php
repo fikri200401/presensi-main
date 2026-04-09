@@ -13,7 +13,7 @@
             <div>
                 <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Office Name</label>
                 <input type="text" id="name" name="name" value="{{ old('name', $office->name) }}" required 
-                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                        placeholder="e.g., Jakarta Head Office">
                 @error('name')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
             </div>
@@ -21,7 +21,7 @@
             <div>
                 <label for="address" class="block text-sm font-medium text-gray-700 mb-1">Address</label>
                 <textarea id="address" name="address" rows="3" required 
-                          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                           placeholder="Full office address...">{{ old('address', $office->address) }}</textarea>
                 @error('address')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
             </div>
@@ -49,7 +49,7 @@
                         </div>
                         <input type="text" id="searchLocation" 
                                placeholder="🔍 Search location (e.g., 'Jakarta City Hall', 'Sudirman Street')" 
-                               class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                               class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                     </div>
                     <div id="searchResults" class="hidden mt-2 bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-y-auto z-10"></div>
                 </div>
@@ -64,7 +64,7 @@
                         Use My GPS
                     </button>
                     <button type="button" onclick="centerOnMarker()" 
-                            class="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-md shadow-sm text-sm font-medium hover:bg-indigo-700 transition">
+                            class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md shadow-sm text-sm font-medium hover:bg-blue-700 transition">
                         <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
                         </svg>
@@ -78,21 +78,21 @@
                     <div>
                         <label for="latitude" class="block text-xs font-medium text-gray-600 mb-1">Latitude</label>
                         <input type="number" step="any" id="latitude" name="latitude" value="{{ old('latitude', $office->latitude) }}" required readonly
-                               class="block w-full rounded-md border-gray-300 bg-gray-50 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm">
+                               class="block w-full rounded-md border-gray-300 bg-gray-50 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
                         @error('latitude')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
                     </div>
 
                     <div>
                         <label for="longitude" class="block text-xs font-medium text-gray-600 mb-1">Longitude</label>
                         <input type="number" step="any" id="longitude" name="longitude" value="{{ old('longitude', $office->longitude) }}" required readonly
-                               class="block w-full rounded-md border-gray-300 bg-gray-50 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm">
+                               class="block w-full rounded-md border-gray-300 bg-gray-50 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
                         @error('longitude')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
                     </div>
 
                     <div>
                         <label for="radius" class="block text-xs font-medium text-gray-600 mb-1">Radius (meters)</label>
                         <input type="number" step="1" id="radius" name="radius" value="{{ old('radius', $office->radius) }}" required
-                               class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm"
+                               class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm"
                                onchange="updateCircleRadius()">
                         @error('radius')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
                     </div>
@@ -103,7 +103,7 @@
                 <a href="{{ route('office.index') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
                     Cancel
                 </a>
-                <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700">
+                <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700">
                     <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                     </svg>
@@ -222,7 +222,7 @@
                     <div class="p-3 hover:bg-gray-50 cursor-pointer transition" 
                          onclick="selectLocation(${result.lat}, ${result.lon}, '${escapeHtml(result.display_name)}')">
                         <div class="flex items-start">
-                            <svg class="w-5 h-5 text-indigo-600 mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg class="w-5 h-5 text-blue-600 mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                             </svg>

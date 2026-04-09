@@ -71,7 +71,7 @@
                                     id="periode" 
                                     required
                                     value="{{ old('periode', date('Y-m')) }}"
-                                    class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                    class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                                 >
                             </div>
                             <p class="mt-2 text-sm text-gray-500">Pilih bulan dan tahun untuk periode payroll</p>
@@ -87,7 +87,7 @@
                                 <button 
                                     type="button" 
                                     onclick="selectAll()"
-                                    class="text-sm text-indigo-600 hover:text-indigo-900 mr-4"
+                                    class="text-sm text-blue-600 hover:text-blue-900 mr-4"
                                 >
                                     Pilih Semua
                                 </button>
@@ -112,7 +112,7 @@
                                                 type="checkbox" 
                                                 value="{{ $employee->id }}"
                                                 {{ in_array($employee->id, old('user_ids', [])) ? 'checked' : '' }}
-                                                class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600 employee-checkbox"
+                                                class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-600 employee-checkbox"
                                             >
                                         </div>
                                         <div class="ml-3 text-sm leading-6">
@@ -144,7 +144,7 @@
                                 <h3 class="mt-2 text-sm font-medium text-gray-900">Tidak ada karyawan</h3>
                                 <p class="mt-1 text-sm text-gray-500">Belum ada karyawan dengan konfigurasi gaji aktif.</p>
                                 <div class="mt-6">
-                                    <a href="{{ route('employee-salary.create') }}" class="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500">
+                                    <a href="{{ route('employee-salary.create') }}" class="inline-flex items-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500">
                                         <svg class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                                         </svg>
@@ -184,7 +184,7 @@
                 <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                     <button 
                         type="submit" 
-                        class="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 sm:ml-3 sm:w-auto"
+                        class="inline-flex w-full justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 sm:ml-3 sm:w-auto"
                         {{ $employees->count() == 0 ? 'disabled' : '' }}
                     >
                         <svg class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">

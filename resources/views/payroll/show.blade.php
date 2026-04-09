@@ -31,11 +31,11 @@
     <!-- Slip Gaji Card -->
     <div class="bg-white shadow-lg rounded-lg overflow-hidden border border-gray-200">
         <!-- Header -->
-        <div class="bg-gradient-to-r from-indigo-600 to-indigo-800 px-6 py-8">
+        <div class="bg-gradient-to-r from-blue-600 to-blue-800 px-6 py-8">
             <div class="flex justify-between items-start">
                 <div>
                     <h2 class="text-2xl font-bold text-white">SLIP GAJI</h2>
-                    <p class="text-indigo-100 mt-1">Periode: {{ $payroll->periode_name }}</p>
+                    <p class="text-blue-100 mt-1">Periode: {{ $payroll->periode_name }}</p>
                 </div>
                 <div class="text-right">
                     <div class="inline-flex rounded-full px-3 py-1 text-sm font-semibold
@@ -78,10 +78,10 @@
                     <p class="text-2xl font-bold text-green-900">{{ $payroll->total_hari_hadir }}</p>
                     <p class="text-xs text-green-600">hari</p>
                 </div>
-                <div class="bg-purple-50 rounded-lg p-3">
-                    <p class="text-xs text-purple-600 font-medium">Total Jam Hadir</p>
-                    <p class="text-2xl font-bold text-purple-900">{{ $payroll->total_jam_hadir }}</p>
-                    <p class="text-xs text-purple-600">jam</p>
+                <div class="bg-blue-50 rounded-lg p-3">
+                    <p class="text-xs text-blue-600 font-medium">Total Jam Hadir</p>
+                    <p class="text-2xl font-bold text-blue-900">{{ $payroll->total_jam_hadir }}</p>
+                    <p class="text-xs text-blue-600">jam</p>
                 </div>
                 <div class="bg-red-50 rounded-lg p-3">
                     <p class="text-xs text-red-600 font-medium">Keterlambatan</p>
@@ -185,9 +185,9 @@
                     <span class="text-gray-700">Gaji Kotor</span>
                     <span class="font-semibold text-gray-900">Rp {{ number_format($payroll->gaji_kotor, 0, ',', '.') }}</span>
                 </div>
-                <div class="flex justify-between text-xl bg-indigo-50 p-4 rounded-lg">
-                    <span class="font-bold text-indigo-900">Gaji Bersih (Take Home Pay)</span>
-                    <span class="font-bold text-indigo-900">Rp {{ number_format($payroll->gaji_bersih, 0, ',', '.') }}</span>
+                <div class="flex justify-between text-xl bg-blue-50 p-4 rounded-lg">
+                    <span class="font-bold text-blue-900">Gaji Bersih (Take Home Pay)</span>
+                    <span class="font-bold text-blue-900">Rp {{ number_format($payroll->gaji_bersih, 0, ',', '.') }}</span>
                 </div>
             </div>
         </div>

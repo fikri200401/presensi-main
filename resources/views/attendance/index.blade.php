@@ -1,115 +1,143 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
-@section('title', 'Attendance')
-@section('page-title', 'Attendance Management')
+@section('title', 'Absensi')
+@section('page-title', 'Data Absensi')
 
 @section('content')
-<div class="mb-4 flex items-center justify-between">
-    <div class="flex-1 max-w-lg">
-        <form method="GET" action="{{ route('attendance.index') }}" class="flex gap-2">
-            <input type="text" name="search" value="{{ request('search') }}" 
-                   placeholder="Search by employee name..." 
-                   class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-            <input type="date" name="date" value="{{ request('date') }}" 
-                   class="rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-            <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                Search
-            </button>
-        </form>
-    </div>
-    @if(auth()->user()->hasRole(['super_admin', 'admin']))
-        <div class="flex gap-2">
-            <a href="{{ route('attendance.import.form') }}" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                <svg class="-ml-1 mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+<!-- Filter & Actions bar -->
+<div class="mb-5 flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
+    <form method="GET" action="{{ route('attendance.index') }}" class="flex flex-wrap gap-2">
+        <div class="relative">
+            <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                <svg class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
                 </svg>
-                Import Absensi
-            </a>
-            <a href="{{ route('attendance.create') }}" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                <svg class="-ml-1 mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                </svg>
-                Add New
-            </a>
+            </div>
+            <input type="text" name="search" value="{{ request('search') }}"
+                   placeholder="Cari nama karyawan..."
+                   class="block w-56 rounded-xl border border-gray-200 bg-white pl-9 pr-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none">
         </div>
+        <input type="date" name="date" value="{{ request('date') }}"
+               class="rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none">
+        <button type="submit"
+                class="inline-flex items-center gap-1.5 rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 transition-colors shadow-sm shadow-blue-100">
+            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" /></svg>
+            Cari
+        </button>
+        @if(request('search') || request('date'))
+            <a href="{{ route('attendance.index') }}" class="inline-flex items-center gap-1.5 rounded-xl border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors">
+                Reset
+            </a>
+        @endif
+    </form>
+
+    @if(auth()->user()->hasRole(['super_admin', 'admin']))
+    <div class="flex gap-2">
+        <a href="{{ route('attendance.import.form') }}"
+           class="inline-flex items-center gap-1.5 rounded-xl border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-colors">
+            <svg class="h-4 w-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
+            </svg>
+            Import
+        </a>
+        <a href="{{ route('attendance.create') }}"
+           class="inline-flex items-center gap-1.5 rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 transition-colors shadow-sm shadow-blue-100">
+            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
+            Tambah
+        </a>
+    </div>
     @endif
 </div>
 
-<div class="bg-white shadow-sm rounded-lg border border-gray-200 overflow-hidden">
+<!-- Table card -->
+<div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
     <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-gray-200">
-            <thead class="bg-gray-50">
-                <tr>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Employee</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Shift</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Schedule Time</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actual Time</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+        <table class="min-w-full divide-y divide-gray-100">
+            <thead>
+                <tr class="bg-gray-50">
+                    <th class="px-6 py-3.5 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Karyawan</th>
+                    <th class="px-6 py-3.5 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Shift</th>
+                    <th class="px-6 py-3.5 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Jadwal</th>
+                    <th class="px-6 py-3.5 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Jam Aktual</th>
+                    <th class="px-6 py-3.5 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Tanggal</th>
+                    <th class="px-6 py-3.5 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Status</th>
+                    <th class="px-6 py-3.5 text-right text-xs font-semibold text-gray-400 uppercase tracking-wider">Aksi</th>
                 </tr>
             </thead>
-            <tbody class="bg-white divide-y divide-gray-200">
+            <tbody class="bg-white divide-y divide-gray-100">
                 @forelse($attendances as $attendance)
-                <tr class="hover:bg-gray-50">
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        <div class="flex items-center">
-                            <div class="h-10 w-10 flex-shrink-0 rounded-full bg-gradient-to-r from-indigo-500 to-purple-600 flex items-center justify-center text-white font-semibold">
+                <tr class="hover:bg-gray-50 transition-colors">
+                    <td class="px-6 py-3.5 whitespace-nowrap">
+                        <div class="flex items-center gap-3">
+                            <div class="h-8 w-8 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-xs flex-shrink-0">
                                 {{ substr($attendance->user->name ?? 'U', 0, 1) }}
                             </div>
-                            <div class="ml-4">
-                                <div class="text-sm font-medium text-gray-900">{{ $attendance->user->name ?? 'N/A' }}</div>
-                            </div>
+                            <p class="text-sm font-semibold text-gray-900">{{ $attendance->user->name ?? 'N/A' }}</p>
                         </div>
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        {{ $attendance->user->schedule->shift->name ?? 'N/A' }}
+                    <td class="px-6 py-3.5 whitespace-nowrap text-sm text-gray-600">
+                        {{ $attendance->user->schedule->shift->name ?? '-' }}
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {{ $attendance->schedule_start_time }} - {{ $attendance->schedule_end_time }}
+                    <td class="px-6 py-3.5 whitespace-nowrap text-sm text-gray-500">
+                        {{ $attendance->schedule_start_time ?? '-' }} &ndash; {{ $attendance->schedule_end_time ?? '-' }}
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {{ $attendance->start_time ? \Carbon\Carbon::parse($attendance->start_time)->format('H:i') : '-' }} - 
+                    <td class="px-6 py-3.5 whitespace-nowrap text-sm text-gray-600 font-medium">
+                        {{ $attendance->start_time ? \Carbon\Carbon::parse($attendance->start_time)->format('H:i') : '-' }}
+                        &ndash;
                         {{ $attendance->end_time ? \Carbon\Carbon::parse($attendance->end_time)->format('H:i') : '-' }}
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <td class="px-6 py-3.5 whitespace-nowrap text-sm text-gray-500">
                         {{ $attendance->created_at->format('d M Y') }}
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <div class="flex gap-2">
+                    <td class="px-6 py-3.5 whitespace-nowrap">
+                        @if($attendance->end_time)
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-50 text-green-700">Selesai</span>
+                        @else
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700">Hadir</span>
+                        @endif
+                    </td>
+                    <td class="px-6 py-3.5 whitespace-nowrap text-right">
+                        <div class="flex items-center justify-end gap-2">
                             @can('update_attendance')
                                 @if(auth()->user()->hasRole(['super_admin', 'admin']) || $attendance->user_id === auth()->id())
-                                    <a href="{{ route('attendance.edit', $attendance) }}" class="text-indigo-600 hover:text-indigo-900">Edit</a>
+                                    <a href="{{ route('attendance.edit', $attendance) }}"
+                                       class="text-xs font-medium text-blue-600 hover:text-blue-700 hover:underline">Edit</a>
                                 @endif
                             @endcan
-                            
+
                             @can('delete_attendance')
                                 @if(auth()->user()->hasRole(['super_admin', 'admin']))
-                                    <form method="POST" action="{{ route('attendance.destroy', $attendance) }}" class="inline" onsubmit="return confirm('Are you sure?')">
+                                    <form method="POST" action="{{ route('attendance.destroy', $attendance) }}" class="inline" onsubmit="return confirm('Yakin hapus data ini?')">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="text-red-600 hover:text-red-900">Delete</button>
+                                        <button type="submit" class="text-xs font-medium text-red-500 hover:text-red-700 hover:underline">Hapus</button>
                                     </form>
                                 @endif
                             @endcan
-                            
+
                             @if(!auth()->user()->can('update_attendance') && !auth()->user()->can('delete_attendance'))
-                                <span class="text-gray-400">-</span>
+                                <span class="text-gray-300 text-xs">&ndash;</span>
                             @endif
                         </div>
                     </td>
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="6" class="px-6 py-4 text-center text-sm text-gray-500">
-                        No attendance records found
+                    <td colspan="7" class="px-6 py-12 text-center">
+                        <svg class="mx-auto h-10 w-10 text-gray-200 mb-2" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <p class="text-sm text-gray-400">Tidak ada data absensi ditemukan</p>
                     </td>
                 </tr>
                 @endforelse
             </tbody>
         </table>
     </div>
-    
-    <div class="px-6 py-4 border-t border-gray-200">
+
+    <div class="px-6 py-4 border-t border-gray-100">
         {{ $attendances->links() }}
     </div>
 </div>
