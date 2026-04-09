@@ -66,9 +66,14 @@
                     </td>
                     <td class="px-6 py-3.5 whitespace-nowrap">
                         <div class="flex items-center gap-3">
-                            <div class="h-9 w-9 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
-                                {{ substr($user->name, 0, 1) }}
-                            </div>
+                            @if($user->image)
+                                <img src="{{ Storage::url($user->image) }}" alt="{{ $user->name }}"
+                                     class="h-9 w-9 rounded-full object-cover flex-shrink-0">
+                            @else
+                                <div class="h-9 w-9 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
+                                    {{ substr($user->name, 0, 1) }}
+                                </div>
+                            @endif
                             <div>
                                 <p class="text-sm font-semibold text-gray-900">{{ $user->name }}</p>
                                 <p class="text-xs text-gray-400">Bergabung {{ $user->created_at->format('d M Y') }}</p>
