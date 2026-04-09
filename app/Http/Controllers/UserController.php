@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\PositionHistory;
 use Spatie\Permission\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -38,24 +39,38 @@ class UserController extends Controller
             'image' => 'nullable|string',
             'role' => 'nullable|exists:roles,name',
             'division' => 'nullable|string|max:100',
-            'position' => 'nullable|string|max:255',
             'nip' => 'nullable|string|max:30',
             'phone' => 'nullable|string|max:20',
         ]);
+
+        // Auto-generate position dari role + division
+        $role = $validated['role'] ?? null;
+        $division = $validated['division'] ?? null;
+        $position = User::generatePosition($role, $division);
 
         $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
             'image' => $validated['image'] ?? null,
-            'division' => $validated['division'] ?? null,
-            'position' => $validated['position'] ?? null,
+            'division' => $division,
+            'position' => $position,
             'nip' => $validated['nip'] ?? null,
             'phone' => $validated['phone'] ?? null,
         ]);
 
-        if (isset($validated['role'])) {
-            $user->assignRole($validated['role']);
+        if ($role) {
+            $user->assignRole($role);
+
+            // Otomatis buat entry pertama di riwayat jabatan
+            $user->positionHistories()->create([
+                'position' => $position,
+                'division' => $division,
+                'role' => $role,
+                'start_date' => now()->toDateString(),
+                'end_date' => null,
+                'description' => "Diangkat sebagai {$position}.",
+            ]);
         }
 
         return redirect()->route('user.index')->with('success', 'User created successfully');
@@ -77,17 +92,31 @@ class UserController extends Controller
             'image' => 'nullable|string',
             'role' => 'nullable|exists:roles,name',
             'division' => 'nullable|string|max:100',
-            'position' => 'nullable|string|max:255',
             'nip' => 'nullable|string|max:30',
             'phone' => 'nullable|string|max:20',
         ]);
+
+        // Simpan data lama sebelum update
+        $oldRole = $user->getRoleNames()->first();
+        $oldDivision = $user->division;
+        $oldPosition = $user->position;
+
+        // Tentukan role & divisi baru
+        $newRole = $validated['role'] ?? $oldRole;
+        $newDivision = $validated['division'] ?? $oldDivision;
+
+        // Auto-generate position dari role + division
+        $position = User::generatePosition($newRole, $newDivision);
+
+        // Cek apakah role atau divisi berubah
+        $positionChanged = ($oldRole !== $newRole) || ($oldDivision !== $newDivision);
 
         $user->update([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'image' => $validated['image'] ?? $user->image,
-            'division' => $validated['division'] ?? $user->division,
-            'position' => $validated['position'] ?? $user->position,
+            'division' => $newDivision,
+            'position' => $position,
             'nip' => $validated['nip'] ?? $user->nip,
             'phone' => $validated['phone'] ?? $user->phone,
         ]);
@@ -98,6 +127,24 @@ class UserController extends Controller
 
         if (isset($validated['role'])) {
             $user->syncRoles([$validated['role']]);
+        }
+
+        // Jika role atau divisi berubah, otomatis update riwayat jabatan
+        if ($positionChanged) {
+            // Tutup entry aktif yang lama (set end_date = hari ini)
+            $user->positionHistories()
+                ->whereNull('end_date')
+                ->update(['end_date' => now()->toDateString()]);
+
+            // Buat entry baru untuk jabatan yang baru
+            $user->positionHistories()->create([
+                'position' => $position,
+                'division' => $newDivision,
+                'role' => $newRole,
+                'start_date' => now()->toDateString(),
+                'end_date' => null,
+                'description' => "Dipindahkan dari {$oldPosition} ke {$position}.",
+            ]);
         }
 
         return redirect()->route('user.index')->with('success', 'User updated successfully');

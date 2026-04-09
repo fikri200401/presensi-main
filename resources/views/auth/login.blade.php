@@ -144,24 +144,24 @@
                             </div>
                             <span class="text-[10px] text-blue-500 group-hover:text-blue-700 font-medium flex-shrink-0">Isi →</span>
                         </button>
-                        <button type="button" onclick="fillDemo('kadiv@hris.test','password')"
+                        <button type="button" onclick="fillDemo('kadiv@presensi.com','password')"
                                 class="w-full flex items-center justify-between gap-2 rounded-lg border border-blue-200 bg-white hover:bg-blue-50 px-3 py-2 text-left transition-colors group">
                             <div class="flex items-center gap-2.5">
                                 <span class="inline-flex items-center justify-center w-6 h-6 rounded-md bg-amber-100 text-amber-700 text-[10px] font-bold flex-shrink-0">KD</span>
                                 <div>
                                     <p class="text-xs font-semibold text-gray-800">Kepala Divisi</p>
-                                    <p class="text-[10px] text-gray-400">kadiv@hris.test</p>
+                                    <p class="text-[10px] text-gray-400">kadiv@presensi.com</p>
                                 </div>
                             </div>
                             <span class="text-[10px] text-blue-500 group-hover:text-blue-700 font-medium flex-shrink-0">Isi →</span>
                         </button>
-                        <button type="button" onclick="fillDemo('direksi@hris.test','password')"
+                        <button type="button" onclick="fillDemo('direksi@presensi.com','password')"
                                 class="w-full flex items-center justify-between gap-2 rounded-lg border border-blue-200 bg-white hover:bg-blue-50 px-3 py-2 text-left transition-colors group">
                             <div class="flex items-center gap-2.5">
                                 <span class="inline-flex items-center justify-center w-6 h-6 rounded-md bg-red-100 text-red-700 text-[10px] font-bold flex-shrink-0">DR</span>
                                 <div>
                                     <p class="text-xs font-semibold text-gray-800">Direksi</p>
-                                    <p class="text-[10px] text-gray-400">direksi@hris.test</p>
+                                    <p class="text-[10px] text-gray-400">direksi@presensi.com</p>
                                 </div>
                             </div>
                             <span class="text-[10px] text-blue-500 group-hover:text-blue-700 font-medium flex-shrink-0">Isi →</span>

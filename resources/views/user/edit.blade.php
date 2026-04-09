@@ -57,10 +57,10 @@
             </div>
 
             <div>
-                <label for="position" class="block text-sm font-medium text-gray-700">Jabatan</label>
+                <label for="position" class="block text-sm font-medium text-gray-700">Jabatan <span class="text-xs text-gray-400 font-normal">(otomatis dari Role & Divisi)</span></label>
                 <input type="text" id="position" name="position" value="{{ old('position', $user->position) }}"
-                    placeholder="Contoh: Staff, Manager, Kepala Unit"
-                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                    readonly
+                    class="mt-1 block w-full rounded-md border-gray-300 bg-gray-50 text-gray-600 shadow-sm sm:text-sm cursor-not-allowed">
                 @error('position')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
             </div>
 
@@ -227,3 +227,27 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+    // Mapping role → template jabatan (sesuai User::ROLE_POSITION_MAP)
+    const rolePositionMap = @json(\App\Models\User::ROLE_POSITION_MAP);
+
+    function updatePosition() {
+        const role = document.getElementById('role').value;
+        const division = document.getElementById('division');
+        const divisionText = division.options[division.selectedIndex]?.text || '';
+        const divisionValue = division.value || '';
+        const positionField = document.getElementById('position');
+
+        if (role && rolePositionMap[role]) {
+            positionField.value = rolePositionMap[role].replace(':division', divisionValue);
+        } else {
+            positionField.value = '';
+        }
+    }
+
+    document.getElementById('role').addEventListener('change', updatePosition);
+    document.getElementById('division').addEventListener('change', updatePosition);
+</script>
+@endpush

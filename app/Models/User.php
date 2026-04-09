@@ -90,4 +90,43 @@ class User extends Authenticatable
     {
         return $this->hasOne(PositionHistory::class)->whereNull('end_date')->latestOfMany('start_date');
     }
+
+    /**
+     * Mapping role → label jabatan.
+     * Jika role terkait divisi, gabungkan nama divisi secara dinamis.
+     */
+    public const ROLE_POSITION_MAP = [
+        'super_admin'    => 'Super Admin',
+        'admin'          => 'Admin :division',
+        'direksi'        => 'Direktur',
+        'kepala_divisi'  => 'Kepala Divisi :division',
+        'employee'       => 'Staff :division',
+    ];
+
+    /**
+     * Generate label jabatan dari role dan divisi.
+     *
+     * @param  string|null  $role
+     * @param  string|null  $division
+     * @return string
+     */
+    public static function generatePosition(?string $role, ?string $division = null): string
+    {
+        if (!$role || !isset(self::ROLE_POSITION_MAP[$role])) {
+            return '';
+        }
+
+        $template = self::ROLE_POSITION_MAP[$role];
+
+        return str_replace(':division', $division ?? '', $template);
+    }
+
+    /**
+     * Jabatan saat ini berdasarkan role aktif + divisi.
+     */
+    public function getPositionLabelAttribute(): string
+    {
+        $role = $this->getRoleNames()->first();
+        return self::generatePosition($role, $this->division);
+    }
 }

@@ -352,11 +352,11 @@ Halaman login menampilkan akun demo untuk testing:
 
 | Role | Email | Password |
 |------|-------|----------|
-| Super Admin | `admin@hris.test` | `password` |
-| Admin/HR | `hr@hris.test` | `password` |
-| Kepala Divisi | `kadiv@hris.test` | `password` |
-| Direksi | `direksi@hris.test` | `password` |
-| Employee | `employee@hris.test` | `password` |
+| Super Admin | `superadmin@presensi.com` | `password` |
+| Admin/HR | `admin@presensi.com` | `password` |
+| Direksi | `direksi@presensi.com` | `password` |
+| Kepala Divisi | `kadiv@presensi.com` | `password` |
+| Employee | `budi.santoso@presensi.com` | `password` |
 
 > **Filament Admin Panel**: `/admin` (hanya Super Admin)
 
