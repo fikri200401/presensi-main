@@ -329,7 +329,7 @@
                                         @else Karyawan @endif
                                     </p>
                                 </div>
-                                <div class="h-9 w-9 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-sm overflow-hidden">
+                                <div class="h-9 w-9 rounded-full {{ auth()->user()->image ? '' : 'bg-blue-600' }} flex items-center justify-center text-white font-bold text-sm overflow-hidden">
                                     @if(auth()->user()->image)
                                         <img src="{{ Storage::url(auth()->user()->image) }}" alt="{{ auth()->user()->name }}" class="h-9 w-9 rounded-full object-cover">
                                     @else
