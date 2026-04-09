@@ -24,6 +24,12 @@ class User extends Authenticatable
         'email',
         'password',
         'image',
+        'division',
+        'phone',
+        'address',
+        'position',
+        'nip',
+        'birth_date',
     ];
 
     /**
@@ -46,6 +52,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'birth_date' => 'date',
         ];
     }
 
@@ -72,5 +79,15 @@ class User extends Authenticatable
     public function payrolls(): HasMany
     {
         return $this->hasMany(Payroll::class);
+    }
+
+    public function positionHistories(): HasMany
+    {
+        return $this->hasMany(PositionHistory::class)->orderByDesc('start_date');
+    }
+
+    public function currentPosition(): HasOne
+    {
+        return $this->hasOne(PositionHistory::class)->whereNull('end_date')->latestOfMany('start_date');
     }
 }

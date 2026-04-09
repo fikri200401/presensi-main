@@ -43,6 +43,42 @@
                 @error('role')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
             </div>
 
+            <div>
+                <label for="division" class="block text-sm font-medium text-gray-700">Divisi</label>
+                <select id="division" name="division"
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                    <option value="">— Pilih Divisi —</option>
+                    @foreach(\App\Models\Division::dropdown() as $key => $label)
+                        <option value="{{ $key }}" {{ old('division') == $key ? 'selected' : '' }}>{{ $label }}</option>
+                    @endforeach
+                </select>
+                @error('division')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
+            </div>
+
+            <div>
+                <label for="position" class="block text-sm font-medium text-gray-700">Jabatan</label>
+                <input type="text" id="position" name="position" value="{{ old('position') }}"
+                    placeholder="Contoh: Staff, Manager, Kepala Unit"
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                @error('position')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
+            </div>
+
+            <div>
+                <label for="nip" class="block text-sm font-medium text-gray-700">NIP</label>
+                <input type="text" id="nip" name="nip" value="{{ old('nip') }}"
+                    placeholder="Nomor Induk Pegawai"
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                @error('nip')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
+            </div>
+
+            <div>
+                <label for="phone" class="block text-sm font-medium text-gray-700">Telepon / WA</label>
+                <input type="text" id="phone" name="phone" value="{{ old('phone') }}"
+                    placeholder="+62 812 3456 7890"
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                @error('phone')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
+            </div>
+
             <div class="flex items-center justify-end gap-3 pt-4 border-t border-gray-200">
                 <a href="{{ route('user.index') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
                     Cancel

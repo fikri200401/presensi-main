@@ -22,7 +22,7 @@ class PayrollController extends Controller
 
         // Non-admin users can only see their own payroll
         $user = Auth::user();
-        if (!$user->hasRole(['super_admin', 'admin'])) {
+        if (!$user->hasRole(['super_admin', 'admin', 'direksi'])) {
             $query->where('user_id', $user->id);
         }
 
@@ -182,7 +182,7 @@ class PayrollController extends Controller
                     'total_potongan' => $totalPotongan,
                     'gaji_kotor' => $gajiKotor,
                     'gaji_bersih' => $gajiBersih,
-                    'status' => 'draft',
+                    'status' => 'approved',
                 ]);
 
                 $generatedCount++;
@@ -213,47 +213,6 @@ class PayrollController extends Controller
     {
         $payroll->load(['user', 'approver']);
         return view('payroll.show', compact('payroll'));
-    }
-
-    /**
-     * Approve a payroll
-     */
-    public function approve(Payroll $payroll)
-    {
-        if ($payroll->status === 'approved' || $payroll->status === 'paid') {
-            return back()->withErrors(['error' => 'Payroll sudah disetujui sebelumnya.']);
-        }
-
-        $payroll->update([
-            'status' => 'approved',
-            'approved_by' => Auth::id(),
-            'approved_at' => now(),
-        ]);
-
-        session()->flash('success', 'Payroll berhasil disetujui.');
-        return back();
-    }
-
-    /**
-     * Reject a payroll
-     */
-    public function reject(Request $request, Payroll $payroll)
-    {
-        $request->validate([
-            'rejection_reason' => 'required|string|min:10',
-        ]);
-
-        if ($payroll->status === 'rejected') {
-            return back()->withErrors(['error' => 'Payroll sudah ditolak sebelumnya.']);
-        }
-
-        $payroll->update([
-            'status' => 'rejected',
-            'catatan' => $request->rejection_reason,
-        ]);
-
-        session()->flash('success', 'Payroll berhasil ditolak.');
-        return back();
     }
 
     /**

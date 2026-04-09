@@ -14,6 +14,9 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\PayrollController;
 use App\Http\Controllers\EmployeeSalaryController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PositionHistoryController;
+use App\Http\Controllers\DivisionController;
 
 // Landing page (public)
 Route::get('/', function () {
@@ -43,11 +46,19 @@ Route::middleware('auth')->group(function() {
     Route::resource('leave', LeaveController::class);
     Route::post('leave/{leave}/approve', [LeaveController::class, 'approve'])->name('leave.approve');
     Route::post('leave/{leave}/reject', [LeaveController::class, 'reject'])->name('leave.reject');
+    // Multi-layer leave approval routes
+    Route::post('leave/{leave}/approve-kadiv', [LeaveController::class, 'approveKadiv'])->name('leave.approve.kadiv');
+    Route::post('leave/{leave}/reject-kadiv', [LeaveController::class, 'rejectKadiv'])->name('leave.reject.kadiv');
+    Route::post('leave/{leave}/approve-hr', [LeaveController::class, 'approveHr'])->name('leave.approve.hr');
+    Route::post('leave/{leave}/reject-hr', [LeaveController::class, 'rejectHr'])->name('leave.reject.hr');
+    Route::post('leave/{leave}/approve-direksi', [LeaveController::class, 'approveDireksi'])->name('leave.approve.direksi');
+    Route::post('leave/{leave}/reject-direksi', [LeaveController::class, 'rejectDireksi'])->name('leave.reject.direksi');
     Route::resource('office', OfficeController::class);
     Route::resource('schedule', ScheduleController::class);
     Route::resource('shift', ShiftController::class);
     Route::resource('user', UserController::class);
     Route::resource('role', RoleController::class);
+    Route::resource('division', DivisionController::class)->except(['create', 'show', 'edit']);
     
     // Payroll routes
     Route::get('payroll', [PayrollController::class, 'index'])->name('payroll.index');
@@ -55,8 +66,6 @@ Route::middleware('auth')->group(function() {
     Route::post('payroll/generate', [PayrollController::class, 'generate'])->name('payroll.generate');
     Route::get('payroll/{payroll}', [PayrollController::class, 'show'])->name('payroll.show');
     Route::get('payroll/{payroll}/export-pdf', [PayrollController::class, 'exportPdf'])->name('payroll.exportPdf');
-    Route::post('payroll/{payroll}/approve', [PayrollController::class, 'approve'])->name('payroll.approve');
-    Route::post('payroll/{payroll}/reject', [PayrollController::class, 'reject'])->name('payroll.reject');
     Route::post('payroll/{payroll}/mark-as-paid', [PayrollController::class, 'markAsPaid'])->name('payroll.markAsPaid');
     Route::delete('payroll/{payroll}', [PayrollController::class, 'destroy'])->name('payroll.destroy');
     
@@ -73,5 +82,15 @@ Route::middleware('auth')->group(function() {
     Route::get('notifications', [\App\Http\Controllers\NotificationController::class, 'index'])->name('notifications.index');
     Route::post('notifications/{notification}/read', [\App\Http\Controllers\NotificationController::class, 'markRead'])->name('notifications.read');
     Route::post('notifications/read-all', [\App\Http\Controllers\NotificationController::class, 'markAllRead'])->name('notifications.read-all');
+
+    // Profile routes
+    Route::get('profile', [ProfileController::class, 'show'])->name('profile.show');
+    Route::put('profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::put('profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
+
+    // Position History routes (admin manages for users)
+    Route::post('user/{user}/position-history', [PositionHistoryController::class, 'store'])->name('position-history.store');
+    Route::put('position-history/{positionHistory}', [PositionHistoryController::class, 'update'])->name('position-history.update');
+    Route::delete('position-history/{positionHistory}', [PositionHistoryController::class, 'destroy'])->name('position-history.destroy');
 });
 

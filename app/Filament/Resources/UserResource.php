@@ -43,6 +43,23 @@ class UserResource extends Resource
                                     ->relationship('roles', 'name')
                                     ->preload()
                                     ->searchable(),
+                Forms\Components\Select::make('division')
+                                    ->label('Divisi')
+                                    ->options(\App\Models\Division::dropdown())
+                                    ->searchable()
+                                    ->placeholder('Pilih Divisi'),
+                                Forms\Components\TextInput::make('position')
+                                    ->label('Jabatan')
+                                    ->maxLength(255)
+                                    ->placeholder('Contoh: Staff, Manager'),
+                                Forms\Components\TextInput::make('nip')
+                                    ->label('NIP')
+                                    ->maxLength(30)
+                                    ->placeholder('Nomor Induk Pegawai'),
+                                Forms\Components\TextInput::make('phone')
+                                    ->label('Telepon')
+                                    ->tel()
+                                    ->maxLength(20),
                                 Forms\Components\FileUpload::make('image')
                                 ])
                     ]),
@@ -75,6 +92,15 @@ class UserResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('division')
+                    ->label('Divisi')
+                    ->searchable()
+                    ->placeholder('—'),
+                Tables\Columns\TextColumn::make('position')
+                    ->label('Jabatan')
+                    ->searchable()
+                    ->placeholder('—')
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('roles.name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email_verified_at')

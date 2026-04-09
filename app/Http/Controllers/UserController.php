@@ -37,6 +37,10 @@ class UserController extends Controller
             'password' => 'required|string|min:8|confirmed',
             'image' => 'nullable|string',
             'role' => 'nullable|exists:roles,name',
+            'division' => 'nullable|string|max:100',
+            'position' => 'nullable|string|max:255',
+            'nip' => 'nullable|string|max:30',
+            'phone' => 'nullable|string|max:20',
         ]);
 
         $user = User::create([
@@ -44,6 +48,10 @@ class UserController extends Controller
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
             'image' => $validated['image'] ?? null,
+            'division' => $validated['division'] ?? null,
+            'position' => $validated['position'] ?? null,
+            'nip' => $validated['nip'] ?? null,
+            'phone' => $validated['phone'] ?? null,
         ]);
 
         if (isset($validated['role'])) {
@@ -56,6 +64,7 @@ class UserController extends Controller
     public function edit(User $user)
     {
         $roles = Role::all();
+        $user->load('positionHistories');
         return view('user.edit', compact('user', 'roles'));
     }
 
@@ -67,12 +76,20 @@ class UserController extends Controller
             'password' => 'nullable|string|min:8|confirmed',
             'image' => 'nullable|string',
             'role' => 'nullable|exists:roles,name',
+            'division' => 'nullable|string|max:100',
+            'position' => 'nullable|string|max:255',
+            'nip' => 'nullable|string|max:30',
+            'phone' => 'nullable|string|max:20',
         ]);
 
         $user->update([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'image' => $validated['image'] ?? $user->image,
+            'division' => $validated['division'] ?? $user->division,
+            'position' => $validated['position'] ?? $user->position,
+            'nip' => $validated['nip'] ?? $user->nip,
+            'phone' => $validated['phone'] ?? $user->phone,
         ]);
 
         if (!empty($validated['password'])) {
