@@ -17,11 +17,19 @@ use App\Http\Controllers\EmployeeSalaryController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PositionHistoryController;
 use App\Http\Controllers\DivisionController;
+use App\Http\Controllers\InfoPageController;
 
 // Landing page (public)
 Route::get('/', function () {
     return view('welcome');
 })->name('home');
+
+// Info pages (public)
+Route::get('/info/dokumentasi', [InfoPageController::class, 'documentation'])->name('info.documentation');
+Route::get('/info/it-support', [InfoPageController::class, 'itSupport'])->name('info.it-support');
+Route::get('/info/status-sistem', [InfoPageController::class, 'systemStatus'])->name('info.system-status');
+Route::get('/info/privacy-policy', [InfoPageController::class, 'privacyPolicy'])->name('info.privacy-policy');
+Route::get('/info/panduan', [InfoPageController::class, 'userGuide'])->name('info.user-guide');
 
 // Guest routes
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');

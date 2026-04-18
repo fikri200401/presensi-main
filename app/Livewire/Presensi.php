@@ -15,18 +15,33 @@ class Presensi extends Component
     public $longitude;
     public $insideRadius = false;
     
+    public function mount()
+    {
+        $schedule = Schedule::where('user_id', Auth::user()->id)->first();
+        
+        // Redirect jika tidak punya schedule
+        if (!$schedule) {
+            session()->flash('error', 'Anda tidak memiliki jadwal kerja. Fitur presensi hanya untuk karyawan.');
+            $this->redirect(route('dashboard'));
+        }
+    }
+
     public function render()
     {
         $schedule = Schedule::where('user_id', Auth::user()->id)->first();
         
-        // Redirect admin/superadmin jika tidak punya schedule
         if (!$schedule) {
-            session()->flash('error', 'Anda tidak memiliki jadwal kerja. Fitur presensi hanya untuk karyawan.');
-            return redirect()->route('dashboard');
+            return '';
         }
         
         $attendance = Attendance::where('user_id', Auth::user()->id)
-                        ->whereDate('created_at', date('Y-m-d'))->first();
+                        ->where(function($q) {
+                            $q->whereDate('date', date('Y-m-d'))
+                              ->orWhere(function($q2) {
+                                  $q2->whereNull('date')
+                                     ->whereDate('created_at', date('Y-m-d'));
+                              });
+                        })->first();
         return view('livewire.presensi',[
             'schedule' => $schedule,
             'insideRadius' => $this->insideRadius,
@@ -57,10 +72,17 @@ class Presensi extends Component
 
         if ($schedule) {
             $attedance = Attendance::where('user_id', Auth::user()->id)
-                        ->whereDate('created_at', date('Y-m-d'))->first();
+                        ->where(function($q) {
+                            $q->whereDate('date', date('Y-m-d'))
+                              ->orWhere(function($q2) {
+                                  $q2->whereNull('date')
+                                     ->whereDate('created_at', date('Y-m-d'));
+                              });
+                        })->first();
             if (!$attedance) {
                 $attedance = Attendance::create([
                     'user_id' => Auth::user()->id,
+                    'date' => Carbon::today()->format('Y-m-d'),
                     'schedule_latitude' => $schedule->office->latitude,
                     'schedule_longitude' => $schedule->office->longitude,
                     'schedule_start_time' => $schedule->shift->start_time,

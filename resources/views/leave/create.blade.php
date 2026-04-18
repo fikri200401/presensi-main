@@ -1,4 +1,4 @@
-﻿@extends('layouts.app')
+@extends('layouts.app')
 
 @section('title', 'Ajukan Cuti')
 @section('page-title', 'Ajukan Cuti / Izin')
@@ -88,4 +88,33 @@
         </form>
     </div>
 </div>
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const startDate = document.getElementById('start_date');
+    const endDate = document.getElementById('end_date');
+    
+    // Remove any potential max attribute that could restrict date selection
+    endDate.removeAttribute('max');
+    startDate.removeAttribute('max');
+    
+    // Set minimum end_date based on start_date selection
+    startDate.addEventListener('change', function() {
+        if (this.value) {
+            endDate.min = this.value;
+            // If end_date is before start_date, reset it
+            if (endDate.value && endDate.value < this.value) {
+                endDate.value = this.value;
+            }
+        }
+    });
+    
+    // Initialize min on load if start_date already has a value
+    if (startDate.value) {
+        endDate.min = startDate.value;
+    }
+});
+</script>
+@endpush
 @endsection

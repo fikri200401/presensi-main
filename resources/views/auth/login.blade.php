@@ -13,7 +13,7 @@
             </svg>
             Kembali ke Beranda
         </a>
-        <a href="#" class="text-sm text-gray-500 hover:text-blue-600 transition-colors">Contact IT Support</a>
+        <a href="{{ route('info.it-support') }}" class="text-sm text-gray-500 hover:text-blue-600 transition-colors">Contact IT Support</a>
     </div>
 
     <!-- Login Card -->
@@ -75,7 +75,7 @@
                     <div>
                         <div class="flex items-center justify-between mb-1.5">
                             <label for="password" class="block text-sm font-medium text-gray-700">Kata Sandi</label>
-                            <a href="#" class="text-sm text-blue-600 hover:text-blue-700 font-medium">Lupa sandi?</a>
+                            <a href="{{ route('info.it-support') }}" class="text-sm text-blue-600 hover:text-blue-700 font-medium">Lupa sandi?</a>
                         </div>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
@@ -109,9 +109,9 @@
                 <div class="mt-6 text-center">
                     <p class="text-xs text-gray-400 mb-2">⚠ Kesulitan mengakses akun Anda?</p>
                     <div class="flex items-center justify-center gap-4">
-                        <a href="#" class="text-sm text-blue-600 hover:text-blue-700 font-medium">Hubungi IT Support</a>
+                        <a href="{{ route('info.it-support') }}" class="text-sm text-blue-600 hover:text-blue-700 font-medium">Hubungi IT Support</a>
                         <span class="text-gray-300">•</span>
-                        <a href="#" class="text-sm text-blue-600 hover:text-blue-700 font-medium">Panduan Pengguna</a>
+                        <a href="{{ route('info.user-guide') }}" class="text-sm text-blue-600 hover:text-blue-700 font-medium">Panduan Pengguna</a>
                     </div>
                 </div>
 
@@ -191,9 +191,9 @@
             Sistem Operasional: Normal
         </div>
         <div class="flex gap-4">
-            <a href="#" class="hover:text-gray-600">Privacy Policy</a>
-            <a href="#" class="hover:text-gray-600">Terms of Service</a>
-            <a href="#" class="hover:text-gray-600">IT Helpdesk</a>
+            <a href="{{ route('info.privacy-policy') }}" class="hover:text-gray-600">Privacy Policy</a>
+            <a href="{{ route('info.privacy-policy') }}" class="hover:text-gray-600">Terms of Service</a>
+            <a href="{{ route('info.it-support') }}" class="hover:text-gray-600">IT Helpdesk</a>
         </div>
     </div>
     <p class="text-center text-xs text-gray-400 pb-4">© {{ date('Y') }} HRIS Internal Portal. All rights reserved.</p>

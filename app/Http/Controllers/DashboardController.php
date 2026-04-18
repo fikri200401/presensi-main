@@ -16,7 +16,13 @@ class DashboardController extends Controller
         $stats = [
             'total_users' => User::count(),
             'total_offices' => Office::count(),
-            'today_attendance' => Attendance::whereDate('created_at', today())->count(),
+            'today_attendance' => Attendance::where(function($q) {
+                $q->whereDate('date', today())
+                  ->orWhere(function($q2) {
+                      $q2->whereNull('date')
+                         ->whereDate('created_at', today());
+                  });
+            })->count(),
             'pending_leaves' => Leave::where('status', 'pending')->count(),
         ];
 
@@ -26,19 +32,31 @@ class DashboardController extends Controller
             ->get();
 
         $attendanceChart = Attendance::select(
-            DB::raw('DATE(created_at) as date'),
+            DB::raw('COALESCE(DATE(date), DATE(created_at)) as att_date'),
             DB::raw('COUNT(*) as count')
         )
-            ->where('created_at', '>=', now()->subDays(7))
-            ->groupBy(DB::raw('DATE(created_at)'))
-            ->orderBy(DB::raw('DATE(created_at)'), 'ASC')
+            ->where(function($q) {
+                $q->where('date', '>=', now()->subDays(7))
+                  ->orWhere(function($q2) {
+                      $q2->whereNull('date')
+                         ->where('created_at', '>=', now()->subDays(7));
+                  });
+            })
+            ->groupBy(DB::raw('COALESCE(DATE(date), DATE(created_at))'))
+            ->orderBy('att_date', 'ASC')
             ->get();
 
-        // Get today's attendance for current employee
+        // Get today's attendance for non-admin roles (employee, kadiv, direksi)
         $todayAttendance = null;
         if (!auth()->user()->hasRole(['super_admin', 'admin'])) {
             $todayAttendance = Attendance::where('user_id', auth()->id())
-                ->whereDate('created_at', today())
+                ->where(function($q) {
+                    $q->whereDate('date', today())
+                      ->orWhere(function($q2) {
+                          $q2->whereNull('date')
+                             ->whereDate('created_at', today());
+                      });
+                })
                 ->first();
         }
 

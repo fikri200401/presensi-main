@@ -1,4 +1,4 @@
-﻿@extends('layouts.app')
+@extends('layouts.app')
 
 @section('title', 'Dashboard')
 @section('page-title', 'Dashboard')
@@ -431,9 +431,13 @@ function toggleRealtime() {
 </script>
 
 {{-- =============================== --}}
-{{-- EMPLOYEE VIEW                   --}}
+{{-- EMPLOYEE / KADIV / DIREKSI VIEW --}}
 {{-- =============================== --}}
 @else
+
+@php
+    $hasSchedule = \App\Models\Schedule::where('user_id', auth()->id())->exists();
+@endphp
 
 <!-- Employee greeting -->
 <div class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
@@ -456,7 +460,9 @@ function toggleRealtime() {
                 <div>
                     <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide">Presensi Harian</p>
                     <h3 class="text-lg font-bold text-gray-900 mt-0.5">
-                        @if(!$todayAttendance)
+                        @if(!$hasSchedule)
+                            Jadwal kerja belum diatur
+                        @elseif(!$todayAttendance)
                             Belum check-in hari ini
                         @elseif(!$todayAttendance->end_time)
                             Sudah Check-In &mdash; Belum Check-Out
@@ -465,7 +471,9 @@ function toggleRealtime() {
                         @endif
                     </h3>
                 </div>
-                @if($todayAttendance && $todayAttendance->end_time)
+                @if(!$hasSchedule)
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-500">Belum Ada Jadwal</span>
+                @elseif($todayAttendance && $todayAttendance->end_time)
                     <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-green-50 text-green-700">Selesai</span>
                 @elseif($todayAttendance)
                     <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700">Aktif</span>
@@ -489,6 +497,7 @@ function toggleRealtime() {
                 </div>
             </div>
 
+            @if($hasSchedule)
             <a href="{{ route('presensi') }}"
                class="w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-xl transition-colors">
                 <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
@@ -503,6 +512,12 @@ function toggleRealtime() {
                     Lihat Detail Presensi
                 @endif
             </a>
+            @else
+            <div class="w-full flex items-center justify-center gap-2 bg-gray-100 text-gray-400 font-semibold py-3 px-4 rounded-xl">
+                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" /></svg>
+                Hubungi admin untuk mengatur jadwal kerja
+            </div>
+            @endif
         </div>
     </div>
 
@@ -542,12 +557,21 @@ function toggleRealtime() {
 <div class="mb-6">
     <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Layanan Cepat</h3>
     <div class="grid grid-cols-2 sm:grid-cols-5 gap-3">
+        @if($hasSchedule)
         <a href="{{ route('presensi') }}" class="bg-white rounded-2xl border border-gray-100 p-4 flex flex-col items-center text-center gap-2.5 hover:border-blue-200 hover:shadow-sm transition-all group">
             <div class="h-11 w-11 rounded-xl bg-blue-50 group-hover:bg-blue-100 flex items-center justify-center transition-colors">
                 <svg class="h-5 w-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" /></svg>
             </div>
             <p class="text-xs font-semibold text-gray-700">Presensi</p>
         </a>
+        @else
+        <div class="bg-white rounded-2xl border border-gray-100 p-4 flex flex-col items-center text-center gap-2.5 opacity-50 cursor-not-allowed">
+            <div class="h-11 w-11 rounded-xl bg-gray-100 flex items-center justify-center">
+                <svg class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" /></svg>
+            </div>
+            <p class="text-xs font-semibold text-gray-400">Presensi</p>
+        </div>
+        @endif
         <a href="{{ route('leave.create') }}" class="bg-white rounded-2xl border border-gray-100 p-4 flex flex-col items-center text-center gap-2.5 hover:border-amber-200 hover:shadow-sm transition-all group">
             <div class="h-11 w-11 rounded-xl bg-amber-50 group-hover:bg-amber-100 flex items-center justify-center transition-colors">
                 <svg class="h-5 w-5 text-amber-500" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" /></svg>

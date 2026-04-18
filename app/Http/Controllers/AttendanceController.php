@@ -25,12 +25,19 @@ class AttendanceController extends Controller
         if ($request->filled('search')) {
             $search = $request->search;
             $query->whereHas('user', function($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%");
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%");
             });
         }
 
         if ($request->filled('date')) {
-            $query->whereDate('created_at', $request->date);
+            $query->where(function($q) use ($request) {
+                $q->whereDate('date', $request->date)
+                  ->orWhere(function($q2) use ($request) {
+                      $q2->whereNull('date')
+                         ->whereDate('created_at', $request->date);
+                  });
+            });
         }
 
         $attendances = $query->latest()->paginate(15);
@@ -61,6 +68,8 @@ class AttendanceController extends Controller
             'start_time' => 'nullable',
             'end_time' => 'nullable',
         ]);
+
+        $validated['date'] = now()->format('Y-m-d');
 
         Attendance::create($validated);
 

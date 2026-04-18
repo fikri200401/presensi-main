@@ -238,7 +238,7 @@
          }
  
          function isWithinRadius(lat, lng, center, radius) {
-             const is_wfa = "{{$schedule->is_wfa}}"
+             const is_wfa = {{$schedule->is_wfa ? 'true' : 'false'}};
              if (is_wfa) {
                  return true;
              } else {
@@ -253,4 +253,3 @@
      </script>
  
  </div>
- 

@@ -25,9 +25,9 @@
                     <span class="text-lg font-bold text-gray-900">HRIS Portal</span>
                 </div>
                 <div class="hidden md:flex items-center gap-8">
-                    <a href="#" class="text-sm text-gray-600 hover:text-blue-600 transition-colors">Dokumentasi</a>
-                    <a href="#" class="text-sm text-gray-600 hover:text-blue-600 transition-colors">IT Support</a>
-                    <a href="#" class="text-sm text-gray-600 hover:text-blue-600 transition-colors">Status Sistem</a>
+                    <a href="{{ route('info.documentation') }}" class="text-sm text-gray-600 hover:text-blue-600 transition-colors">Dokumentasi</a>
+                    <a href="{{ route('info.it-support') }}" class="text-sm text-gray-600 hover:text-blue-600 transition-colors">IT Support</a>
+                    <a href="{{ route('info.system-status') }}" class="text-sm text-gray-600 hover:text-blue-600 transition-colors">Status Sistem</a>
                 </div>
                 @if(Route::has('login'))
                     @auth
@@ -71,7 +71,7 @@
                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" /></svg>
                     </a>
                 @endauth
-                <a href="#" class="inline-flex items-center gap-2 bg-white hover:bg-gray-50 text-gray-700 font-semibold px-6 py-3 rounded-xl border border-gray-200 transition-all hover:-translate-y-0.5">
+                <a href="{{ route('info.user-guide') }}" class="inline-flex items-center gap-2 bg-white hover:bg-gray-50 text-gray-700 font-semibold px-6 py-3 rounded-xl border border-gray-200 transition-all hover:-translate-y-0.5">
                     Panduan Pengguna
                 </a>
             </div>
@@ -218,7 +218,7 @@
                     @else
                         <a href="{{ route('login') }}" class="inline-flex items-center justify-center bg-white text-blue-600 font-semibold px-5 py-2.5 rounded-xl hover:bg-blue-50 transition-colors text-sm">Portal Login</a>
                     @endauth
-                    <a href="#" class="inline-flex items-center justify-center bg-blue-700 text-white font-semibold px-5 py-2.5 rounded-xl hover:bg-blue-800 transition-colors text-sm border border-blue-500">Kontak Admin</a>
+                    <a href="{{ route('info.it-support') }}" class="inline-flex items-center justify-center bg-blue-700 text-white font-semibold px-5 py-2.5 rounded-xl hover:bg-blue-800 transition-colors text-sm border border-blue-500">Kontak Admin</a>
                 </div>
             </div>
         </div>
@@ -240,34 +240,34 @@
                 <div>
                     <h4 class="text-sm font-semibold text-gray-700 mb-3">Quick Access</h4>
                     <ul class="space-y-2">
-                        <li><a href="#" class="text-sm text-gray-500 hover:text-blue-600 transition-colors">Employee Directory</a></li>
-                        <li><a href="#" class="text-sm text-gray-500 hover:text-blue-600 transition-colors">Knowledge Base</a></li>
-                        <li><a href="#" class="text-sm text-gray-500 hover:text-blue-600 transition-colors">System Status</a></li>
+                        <li><a href="{{ route('login') }}" class="text-sm text-gray-500 hover:text-blue-600 transition-colors">Employee Directory</a></li>
+                        <li><a href="{{ route('info.documentation') }}" class="text-sm text-gray-500 hover:text-blue-600 transition-colors">Knowledge Base</a></li>
+                        <li><a href="{{ route('info.system-status') }}" class="text-sm text-gray-500 hover:text-blue-600 transition-colors">System Status</a></li>
                     </ul>
                 </div>
                 <div>
                     <h4 class="text-sm font-semibold text-gray-700 mb-3">Support</h4>
                     <ul class="space-y-2">
-                        <li><a href="#" class="text-sm text-gray-500 hover:text-blue-600 transition-colors">Contact IT Helpdesk</a></li>
-                        <li><a href="#" class="text-sm text-gray-500 hover:text-blue-600 transition-colors">HR Policy Manual</a></li>
-                        <li><a href="#" class="text-sm text-gray-500 hover:text-blue-600 transition-colors">Submit a Ticket</a></li>
+                        <li><a href="{{ route('info.it-support') }}" class="text-sm text-gray-500 hover:text-blue-600 transition-colors">Contact IT Helpdesk</a></li>
+                        <li><a href="{{ route('info.documentation') }}" class="text-sm text-gray-500 hover:text-blue-600 transition-colors">HR Policy Manual</a></li>
+                        <li><a href="{{ route('info.it-support') }}" class="text-sm text-gray-500 hover:text-blue-600 transition-colors">Submit a Ticket</a></li>
                     </ul>
                 </div>
                 <div>
                     <h4 class="text-sm font-semibold text-gray-700 mb-3">Legal</h4>
                     <ul class="space-y-2">
-                        <li><a href="#" class="text-sm text-gray-500 hover:text-blue-600 transition-colors">Terms of Use</a></li>
-                        <li><a href="#" class="text-sm text-gray-500 hover:text-blue-600 transition-colors">Data Protection</a></li>
-                        <li><a href="#" class="text-sm text-gray-500 hover:text-blue-600 transition-colors">Compliance</a></li>
+                        <li><a href="{{ route('info.privacy-policy') }}" class="text-sm text-gray-500 hover:text-blue-600 transition-colors">Terms of Use</a></li>
+                        <li><a href="{{ route('info.privacy-policy') }}" class="text-sm text-gray-500 hover:text-blue-600 transition-colors">Data Protection</a></li>
+                        <li><a href="{{ route('info.privacy-policy') }}" class="text-sm text-gray-500 hover:text-blue-600 transition-colors">Compliance</a></li>
                     </ul>
                 </div>
             </div>
             <div class="border-t border-gray-100 pt-6 flex flex-col sm:flex-row items-center justify-between gap-2">
                 <p class="text-xs text-gray-400">© {{ date('Y') }} HRIS Internal Portal. All rights reserved.</p>
                 <div class="flex gap-4">
-                    <a href="#" class="text-xs text-gray-400 hover:text-gray-600">Privacy Policy</a>
-                    <a href="#" class="text-xs text-gray-400 hover:text-gray-600">Terms of Service</a>
-                    <a href="#" class="text-xs text-gray-400 hover:text-gray-600">IT Helpdesk</a>
+                    <a href="{{ route('info.privacy-policy') }}" class="text-xs text-gray-400 hover:text-gray-600">Privacy Policy</a>
+                    <a href="{{ route('info.privacy-policy') }}" class="text-xs text-gray-400 hover:text-gray-600">Terms of Service</a>
+                    <a href="{{ route('info.it-support') }}" class="text-xs text-gray-400 hover:text-gray-600">IT Helpdesk</a>
                 </div>
             </div>
         </div>

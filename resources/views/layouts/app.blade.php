@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full bg-gray-50">
 <head>
     <meta charset="utf-8">
@@ -177,7 +177,7 @@
                         <nav class="hidden lg:flex items-center gap-1">
                             <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'text-blue-600 font-semibold' : 'text-gray-500 hover:text-gray-700' }} px-3 py-1.5 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors">Overview</a>
                             <a href="{{ route('attendance.index') }}" class="{{ request()->routeIs('attendance.*') ? 'text-blue-600 font-semibold' : 'text-gray-500 hover:text-gray-700' }} px-3 py-1.5 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors">Analytics</a>
-                            <a href="#" class="text-gray-500 hover:text-gray-700 px-3 py-1.5 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors">Activity Logs</a>
+                            <a href="{{ route('attendance.index') }}" class="text-gray-500 hover:text-gray-700 px-3 py-1.5 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors">Activity Logs</a>
                         </nav>
                         @endif
                     </div>
@@ -258,7 +258,7 @@
                                     {{-- Notification items --}}
                                     <template x-for="notif in notifications" :key="notif.id">
                                         <a :href="notif.url || '#'"
-                                           @click="markRead(notif)"
+                                           @click="markRead(notif, $event)"
                                            :class="notif.is_read ? 'bg-white hover:bg-gray-50' : 'bg-blue-50/60 hover:bg-blue-50'"
                                            class="flex items-start gap-3 px-4 py-3 transition-colors cursor-pointer">
 
@@ -403,9 +403,9 @@
                     </form>
                     <p>&copy; {{ date('Y') }} HRIS Portal - Internal Use Only</p>
                     <div class="flex gap-4">
-                        <a href="#" class="hover:text-gray-600 transition-colors">IT Support</a>
-                        <a href="#" class="hover:text-gray-600 transition-colors">Privacy Policy</a>
-                        <a href="#" class="hover:text-gray-600 transition-colors">Security Guidelines</a>
+                        <a href="{{ route('info.it-support') }}" class="hover:text-gray-600 transition-colors">IT Support</a>
+                        <a href="{{ route('info.privacy-policy') }}" class="hover:text-gray-600 transition-colors">Privacy Policy</a>
+                        <a href="{{ route('info.privacy-policy') }}" class="hover:text-gray-600 transition-colors">Security Guidelines</a>
                     </div>
                 </div>
             </footer>
@@ -439,17 +439,31 @@
                 }
             },
 
-            async markRead(notif) {
+            async markRead(notif, event) {
                 if (notif.is_read) return;
+                
+                // Prevent navigation until we mark as read
+                if (event) event.preventDefault();
+                
                 notif.is_read = true;
                 this.unreadCount = Math.max(0, this.unreadCount - 1);
-                await fetch(`/notifications/${notif.id}/read`, {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                        'Accept': 'application/json',
-                    }
-                });
+                
+                try {
+                    await fetch(`/notifications/${notif.id}/read`, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                            'Accept': 'application/json',
+                        }
+                    });
+                } catch(e) {
+                    console.error('Failed to mark notification as read', e);
+                }
+                
+                // Navigate to URL after marking as read
+                if (notif.url && notif.url !== '#') {
+                    window.location.href = notif.url;
+                }
             },
 
             async markAllRead() {

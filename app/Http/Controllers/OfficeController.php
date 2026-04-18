@@ -12,8 +12,11 @@ class OfficeController extends Controller
         $query = Office::query();
 
         if ($request->filled('search')) {
-            $query->where('name', 'like', "%{$request->search}%")
-                  ->orWhere('address', 'like', "%{$request->search}%");
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('address', 'like', "%{$search}%");
+            });
         }
 
         $offices = $query->latest()->paginate(15);
