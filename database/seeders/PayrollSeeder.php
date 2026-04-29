@@ -16,7 +16,7 @@ class PayrollSeeder extends Seeder
      */
     public function run(): void
     {
-        $employees = User::role('employee')->get();
+        $employees = User::role('employee')->get()->unique('id');
 
         if ($employees->isEmpty()) {
             $this->command->warn('Make sure users are seeded first!');
@@ -24,10 +24,11 @@ class PayrollSeeder extends Seeder
         }
 
         // Create payroll for last 3 months
+        $now = Carbon::now();
         $months = [
-            Carbon::now()->subMonths(2)->startOfMonth(), // 2 bulan lalu
-            Carbon::now()->subMonth()->startOfMonth(),   // Bulan lalu
-            Carbon::now()->startOfMonth(),               // Bulan ini
+            $now->copy()->subMonths(2)->startOfMonth(), // 2 bulan lalu
+            $now->copy()->subMonth()->startOfMonth(),   // Bulan lalu
+            $now->copy()->startOfMonth(),               // Bulan ini
         ];
 
         $statuses = ['draft', 'pending', 'approved', 'paid'];
@@ -125,9 +126,12 @@ class PayrollSeeder extends Seeder
                     $catatan = $status === 'pending' ? 'Menunggu approval dari admin.' : null;
                 }
 
-                Payroll::create([
-                    'user_id' => $employee->id,
-                    'periode' => $periode,
+                Payroll::updateOrCreate(
+                    [
+                        'user_id' => $employee->id,
+                        'periode' => $periode,
+                    ],
+                    [
                     'bulan' => $bulan,
                     'tahun' => $tahun,
                     
@@ -169,7 +173,8 @@ class PayrollSeeder extends Seeder
                     
                     'created_at' => $monthEnd->copy()->subDays(10),
                     'updated_at' => $approvedAt ?? $monthEnd->copy()->subDays(10),
-                ]);
+                ]
+                );
             }
         }
 
