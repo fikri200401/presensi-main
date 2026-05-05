@@ -81,6 +81,8 @@ class RolePermissionSeeder extends Seeder
             'view_payroll',
             'view_any_payroll',
             'create_payroll',
+            'view_salary_setting',
+            'update_salary_setting',
 
             // Division permissions
             'view_division',
@@ -88,6 +90,11 @@ class RolePermissionSeeder extends Seeder
             'create_division',
             'update_division',
             'delete_division',
+
+            // Setting permissions
+            'view_setting',
+            'view_any_setting',
+            'update_setting',
         ];
 
         foreach ($permissions as $permission) {
@@ -108,7 +115,9 @@ class RolePermissionSeeder extends Seeder
             'view_attendance', 'view_any_attendance',
             'view_leave', 'view_any_leave', 'update_leave', 'approve_leave_hr',
             'view_payroll', 'view_any_payroll', 'create_payroll',
+            'view_salary_setting', 'update_salary_setting',
             'view_division', 'view_any_division', 'create_division', 'update_division', 'delete_division',
+            'view_setting', 'view_any_setting', 'update_setting',
         ]);
 
         // ===== DIREKSI — Final approval leave, view reports =====

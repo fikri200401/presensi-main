@@ -337,8 +337,8 @@
                 <tr>
                     <td class="item">Gaji Pokok</td>
                     <td class="value-col">Rp. {{ number_format($payroll->gaji_pokok, 0, ',', '.') }}</td>
-                    <td class="item">Pembayaran Motor</td>
-                    <td class="value-col">Rp. 0</td>
+                    <td class="item">JHT</td>
+                    <td class="value-col">Rp. {{ number_format($payroll->potongan_jht, 0, ',', '.') }}</td>
                 </tr>
                 
                 <!-- Tunjangan -->
@@ -346,8 +346,8 @@
                 <tr>
                     <td class="item">Tunjangan Transport</td>
                     <td class="value-col">Rp. {{ number_format($payroll->tunjangan_transport, 0, ',', '.') }}</td>
-                    <td class="item">Pemb.Sepeda Motor</td>
-                    <td class="value-col">Rp. 0</td>
+                    <td class="item">JKS / BPJS Kes</td>
+                    <td class="value-col">Rp. {{ number_format($payroll->potongan_jks, 0, ',', '.') }}</td>
                 </tr>
                 @endif
                 
@@ -355,31 +355,40 @@
                 <tr>
                     <td class="item">Tunjangan Makan</td>
                     <td class="value-col">Rp. {{ number_format($payroll->tunjangan_makan, 0, ',', '.') }}</td>
-                    <td class="item">Pemb. Listrik Umum</td>
-                    <td class="value-col">Rp. 0</td>
+                    <td class="item">PPH 21</td>
+                    <td class="value-col">Rp. {{ number_format($payroll->potongan_pph21, 0, ',', '.') }}</td>
+                </tr>
+                @endif
+
+                @if($payroll->tunjangan_jabatan > 0)
+                <tr>
+                    <td class="item">Tunjangan Jabatan</td>
+                    <td class="value-col">Rp. {{ number_format($payroll->tunjangan_jabatan, 0, ',', '.') }}</td>
+                    <td class="item">Potongan Manual</td>
+                    <td class="value-col">Rp. {{ number_format($payroll->potongan_manual, 0, ',', '.') }}</td>
                 </tr>
                 @endif
                 
                 <tr>
                     <td class="item">Uang Lembur</td>
                     <td class="value-col">Rp. 0</td>
-                    <td class="item">PPH 21</td>
-                    <td class="value-col">Rp. {{ number_format($payroll->potongan_pph21, 0, ',', '.') }}</td>
+                    <td class="item">Potongan Keterlambatan</td>
+                    <td class="value-col">Rp. {{ number_format($payroll->potongan_keterlambatan, 0, ',', '.') }}</td>
                 </tr>
                 
                 @if($payroll->tunjangan_lainnya > 0)
                 <tr>
                     <td class="item">Tunjangan Lainnya</td>
                     <td class="value-col">Rp. {{ number_format($payroll->tunjangan_lainnya, 0, ',', '.') }}</td>
-                    <td class="item">Asuransi JKTK</td>
-                    <td class="value-col">Rp. 0</td>
+                    <td class="item">Potongan Lainnya</td>
+                    <td class="value-col">Rp. {{ number_format($payroll->potongan_lainnya, 0, ',', '.') }}</td>
                 </tr>
                 @endif
                 
                 <tr>
                     <td class="item">Insentif</td>
                     <td class="value-col">Rp. 0</td>
-                    <td class="item">BPJS Kes</td>
+                    <td class="item">BPJS Kes Lama</td>
                     <td class="value-col">Rp. {{ number_format($payroll->potongan_bpjs_kesehatan, 0, ',', '.') }}</td>
                 </tr>
                 
@@ -417,6 +426,24 @@
                     <td class="item"></td>
                     <td class="value-col"></td>
                 </tr>
+
+                @foreach($payroll->components->where('type', 'allowance') as $component)
+                <tr>
+                    <td class="item">{{ $component->name }}</td>
+                    <td class="value-col">Rp. {{ number_format($component->amount, 0, ',', '.') }}</td>
+                    <td class="item"></td>
+                    <td class="value-col"></td>
+                </tr>
+                @endforeach
+
+                @foreach($payroll->components->where('type', 'deduction') as $component)
+                <tr>
+                    <td class="item"></td>
+                    <td class="value-col"></td>
+                    <td class="item">{{ $component->name }}</td>
+                    <td class="value-col">Rp. {{ number_format($component->amount, 0, ',', '.') }}</td>
+                </tr>
+                @endforeach
                 
                 <tr>
                     <td class="item">Total Masuk</td>

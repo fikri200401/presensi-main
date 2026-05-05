@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Payroll extends Model
 {
@@ -25,12 +26,17 @@ class Payroll extends Model
         'gaji_per_jam',
         'tunjangan_transport',
         'tunjangan_makan',
+        'tunjangan_jabatan',
         'tunjangan_lainnya',
         'total_tunjangan',
         'potongan_bpjs_kesehatan',
         'potongan_bpjs_ketenagakerjaan',
+        'potongan_jht',
+        'potongan_jks',
         'potongan_pph21',
         'potongan_keterlambatan',
+        'potongan_manual',
+        'keterangan_potongan_manual',
         'potongan_lainnya',
         'total_potongan',
         'gaji_kotor',
@@ -47,12 +53,16 @@ class Payroll extends Model
         'gaji_per_jam' => 'decimal:2',
         'tunjangan_transport' => 'decimal:2',
         'tunjangan_makan' => 'decimal:2',
+        'tunjangan_jabatan' => 'decimal:2',
         'tunjangan_lainnya' => 'decimal:2',
         'total_tunjangan' => 'decimal:2',
         'potongan_bpjs_kesehatan' => 'decimal:2',
         'potongan_bpjs_ketenagakerjaan' => 'decimal:2',
+        'potongan_jht' => 'decimal:2',
+        'potongan_jks' => 'decimal:2',
         'potongan_pph21' => 'decimal:2',
         'potongan_keterlambatan' => 'decimal:2',
+        'potongan_manual' => 'decimal:2',
         'potongan_lainnya' => 'decimal:2',
         'total_potongan' => 'decimal:2',
         'gaji_kotor' => 'decimal:2',
@@ -68,6 +78,11 @@ class Payroll extends Model
     public function approver(): BelongsTo
     {
         return $this->belongsTo(User::class, 'approved_by');
+    }
+
+    public function components(): HasMany
+    {
+        return $this->hasMany(PayrollComponent::class);
     }
 
     /**

@@ -14,14 +14,20 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\PayrollController;
 use App\Http\Controllers\EmployeeSalaryController;
+use App\Http\Controllers\SalarySettingController;
+use App\Http\Controllers\SalaryComponentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PositionHistoryController;
 use App\Http\Controllers\DivisionController;
 use App\Http\Controllers\InfoPageController;
+use App\Http\Controllers\LandingPageSettingController;
+use App\Models\LandingPageSetting;
 
 // Landing page (public)
 Route::get('/', function () {
-    return view('welcome');
+    return view('welcome', [
+        'landingSetting' => LandingPageSetting::current(),
+    ]);
 })->name('home');
 
 // Info pages (public)
@@ -72,13 +78,23 @@ Route::middleware('auth')->group(function() {
     Route::get('payroll', [PayrollController::class, 'index'])->name('payroll.index');
     Route::get('payroll/create', [PayrollController::class, 'create'])->name('payroll.create');
     Route::post('payroll/generate', [PayrollController::class, 'generate'])->name('payroll.generate');
+    Route::put('payroll/{payroll}/deductions', [PayrollController::class, 'updateDeductions'])->name('payroll.updateDeductions');
+    Route::post('payroll/{payroll}/submit', [PayrollController::class, 'submit'])->name('payroll.submit');
+    Route::post('payroll/{payroll}/approve', [PayrollController::class, 'approve'])->name('payroll.approve');
+    Route::post('payroll/{payroll}/reject', [PayrollController::class, 'reject'])->name('payroll.reject');
     Route::get('payroll/{payroll}', [PayrollController::class, 'show'])->name('payroll.show');
     Route::get('payroll/{payroll}/export-pdf', [PayrollController::class, 'exportPdf'])->name('payroll.exportPdf');
-    Route::post('payroll/{payroll}/mark-as-paid', [PayrollController::class, 'markAsPaid'])->name('payroll.markAsPaid');
     Route::delete('payroll/{payroll}', [PayrollController::class, 'destroy'])->name('payroll.destroy');
     
     // Employee Salary routes
     Route::resource('employee-salary', EmployeeSalaryController::class);
+
+    // Salary setting routes
+    Route::get('salary-settings', [SalarySettingController::class, 'edit'])->name('salary-settings.edit');
+    Route::put('salary-settings', [SalarySettingController::class, 'update'])->name('salary-settings.update');
+    Route::post('salary-components', [SalaryComponentController::class, 'store'])->name('salary-components.store');
+    Route::put('salary-components/{salaryComponent}', [SalaryComponentController::class, 'update'])->name('salary-components.update');
+    Route::delete('salary-components/{salaryComponent}', [SalaryComponentController::class, 'destroy'])->name('salary-components.destroy');
     
     // Legacy routes for compatibility
     Route::get('presensi', Presensi::class)->name('presensi');
@@ -96,9 +112,12 @@ Route::middleware('auth')->group(function() {
     Route::put('profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::put('profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
 
+    // Landing page settings
+    Route::get('settings', [LandingPageSettingController::class, 'index'])->name('settings.index');
+    Route::put('settings', [LandingPageSettingController::class, 'update'])->name('settings.update');
+
     // Position History routes (admin manages for users)
     Route::post('user/{user}/position-history', [PositionHistoryController::class, 'store'])->name('position-history.store');
     Route::put('position-history/{positionHistory}', [PositionHistoryController::class, 'update'])->name('position-history.update');
     Route::delete('position-history/{positionHistory}', [PositionHistoryController::class, 'destroy'])->name('position-history.destroy');
 });
-

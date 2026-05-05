@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\EmployeeSalary;
 use App\Models\User;
 use App\Models\SalarySetting;
+use App\Models\SalaryComponent;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class EmployeeSalaryController extends Controller
 {
@@ -34,8 +34,12 @@ class EmployeeSalaryController extends Controller
         })->get();
 
         $settings = SalarySetting::getSettings();
+        $salaryComponents = SalaryComponent::active()
+            ->orderBy('type')
+            ->orderBy('name')
+            ->get();
 
-        return view('employee-salary.create', compact('users', 'settings'));
+        return view('employee-salary.create', compact('users', 'settings', 'salaryComponents'));
     }
 
     /**
@@ -50,14 +54,15 @@ class EmployeeSalaryController extends Controller
             'metode_perhitungan' => 'required|in:bulanan,harian,jam',
             'tunjangan_transport' => 'nullable|numeric|min:0',
             'tunjangan_makan' => 'nullable|numeric|min:0',
-            'tunjangan_jabatan' => 'nullable|numeric|min:0',
-            'tunjangan_keluarga' => 'nullable|numeric|min:0',
             'tunjangan_lainnya' => 'nullable|numeric|min:0',
-            'potongan_bpjs_kesehatan_persen' => 'nullable|numeric|min:0|max:100',
-            'potongan_bpjs_ketenagakerjaan_persen' => 'nullable|numeric|min:0|max:100',
             'potongan_pph21' => 'nullable|numeric|min:0',
             'potongan_lainnya' => 'nullable|numeric|min:0',
             'berlaku_dari' => 'nullable|date',
+            'components' => 'nullable|array',
+            'components.*.enabled' => 'nullable|boolean',
+            'components.*.amount' => 'nullable|numeric|min:0',
+            'components.*.percentage' => 'nullable|numeric|min:0|max:100',
+            'components.*.notes' => 'nullable|string|max:500',
         ]);
 
         // Deactivate old salary configuration if exists
@@ -72,11 +77,7 @@ class EmployeeSalaryController extends Controller
             'metode_perhitungan' => $request->metode_perhitungan,
             'tunjangan_transport' => $request->tunjangan_transport ?? 0,
             'tunjangan_makan' => $request->tunjangan_makan ?? 0,
-            'tunjangan_jabatan' => $request->tunjangan_jabatan ?? 0,
-            'tunjangan_keluarga' => $request->tunjangan_keluarga ?? 0,
             'tunjangan_lainnya' => $request->tunjangan_lainnya ?? 0,
-            'potongan_bpjs_kesehatan_persen' => $request->potongan_bpjs_kesehatan_persen ?? 1,
-            'potongan_bpjs_ketenagakerjaan_persen' => $request->potongan_bpjs_ketenagakerjaan_persen ?? 2,
             'potongan_pph21' => $request->potongan_pph21 ?? 0,
             'potongan_lainnya' => $request->potongan_lainnya ?? 0,
             'is_active' => true,
@@ -85,6 +86,7 @@ class EmployeeSalaryController extends Controller
 
         // Auto-calculate rates
         $employeeSalary->calculateRates();
+        $this->syncSalaryComponents($employeeSalary, $request->input('components', []));
 
         session()->flash('success', 'Konfigurasi gaji karyawan berhasil dibuat.');
         return redirect()->route('employee-salary.index');
@@ -96,7 +98,13 @@ class EmployeeSalaryController extends Controller
     public function edit(EmployeeSalary $employeeSalary)
     {
         $settings = SalarySetting::getSettings();
-        return view('employee-salary.edit', compact('employeeSalary', 'settings'));
+        $salaryComponents = SalaryComponent::active()
+            ->orderBy('type')
+            ->orderBy('name')
+            ->get();
+        $employeeSalary->load('salaryComponents.component');
+
+        return view('employee-salary.edit', compact('employeeSalary', 'settings', 'salaryComponents'));
     }
 
     /**
@@ -110,14 +118,15 @@ class EmployeeSalaryController extends Controller
             'metode_perhitungan' => 'required|in:bulanan,harian,jam',
             'tunjangan_transport' => 'nullable|numeric|min:0',
             'tunjangan_makan' => 'nullable|numeric|min:0',
-            'tunjangan_jabatan' => 'nullable|numeric|min:0',
-            'tunjangan_keluarga' => 'nullable|numeric|min:0',
             'tunjangan_lainnya' => 'nullable|numeric|min:0',
-            'potongan_bpjs_kesehatan_persen' => 'nullable|numeric|min:0|max:100',
-            'potongan_bpjs_ketenagakerjaan_persen' => 'nullable|numeric|min:0|max:100',
             'potongan_pph21' => 'nullable|numeric|min:0',
             'potongan_lainnya' => 'nullable|numeric|min:0',
             'is_active' => 'boolean',
+            'components' => 'nullable|array',
+            'components.*.enabled' => 'nullable|boolean',
+            'components.*.amount' => 'nullable|numeric|min:0',
+            'components.*.percentage' => 'nullable|numeric|min:0|max:100',
+            'components.*.notes' => 'nullable|string|max:500',
         ]);
 
         $employeeSalary->update([
@@ -126,11 +135,7 @@ class EmployeeSalaryController extends Controller
             'metode_perhitungan' => $request->metode_perhitungan,
             'tunjangan_transport' => $request->tunjangan_transport ?? 0,
             'tunjangan_makan' => $request->tunjangan_makan ?? 0,
-            'tunjangan_jabatan' => $request->tunjangan_jabatan ?? 0,
-            'tunjangan_keluarga' => $request->tunjangan_keluarga ?? 0,
             'tunjangan_lainnya' => $request->tunjangan_lainnya ?? 0,
-            'potongan_bpjs_kesehatan_persen' => $request->potongan_bpjs_kesehatan_persen ?? 1,
-            'potongan_bpjs_ketenagakerjaan_persen' => $request->potongan_bpjs_ketenagakerjaan_persen ?? 2,
             'potongan_pph21' => $request->potongan_pph21 ?? 0,
             'potongan_lainnya' => $request->potongan_lainnya ?? 0,
             'is_active' => $request->has('is_active'),
@@ -138,6 +143,7 @@ class EmployeeSalaryController extends Controller
 
         // Auto-calculate rates
         $employeeSalary->calculateRates();
+        $this->syncSalaryComponents($employeeSalary, $request->input('components', []));
 
         session()->flash('success', 'Konfigurasi gaji karyawan berhasil diupdate.');
         return redirect()->route('employee-salary.index');
@@ -152,5 +158,29 @@ class EmployeeSalaryController extends Controller
         
         session()->flash('success', 'Konfigurasi gaji karyawan berhasil dihapus.');
         return redirect()->route('employee-salary.index');
+    }
+
+    private function syncSalaryComponents(EmployeeSalary $employeeSalary, array $componentInputs): void
+    {
+        $employeeSalary->salaryComponents()->delete();
+
+        foreach ($componentInputs as $componentId => $input) {
+            if (empty($input['enabled'])) {
+                continue;
+            }
+
+            $component = SalaryComponent::active()->find($componentId);
+            if (!$component) {
+                continue;
+            }
+
+            $employeeSalary->salaryComponents()->create([
+                'salary_component_id' => $component->id,
+                'amount' => $input['amount'] ?? null,
+                'percentage' => $input['percentage'] ?? null,
+                'is_active' => true,
+                'notes' => $input['notes'] ?? null,
+            ]);
+        }
     }
 }

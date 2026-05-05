@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('title', 'Dashboard')
 @section('page-title', 'Dashboard')
@@ -17,16 +17,6 @@
         <p class="text-sm text-gray-500 mt-0.5">Selamat datang kembali, {{ auth()->user()->name }}. Berikut adalah ringkasan hari ini.</p>
     </div>
     <div class="flex items-center gap-2 flex-shrink-0">
-        {{-- Real-time Mode toggle --}}
-        <button type="button" id="btn-realtime"
-                onclick="toggleRealtime()"
-                class="inline-flex items-center gap-1.5 rounded-xl border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
-            <span id="realtime-dot" class="w-2 h-2 rounded-full bg-gray-300 flex-shrink-0"></span>
-            <svg class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            <span id="realtime-label">Real-time Mode</span>
-        </button>
         <a href="{{ route('user.create') }}" class="inline-flex items-center gap-1.5 rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 transition-colors">
             <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z" />
@@ -286,7 +276,7 @@
 {{-- =============================== --}}
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
 <script>
-// ── Chart.js ──────────────────────────────────────────────────────────────
+// â”€â”€ Chart.js â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const chartData = {
     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun'],
     hadir:  [432, 510, 360, 540, 480, 570],
@@ -349,7 +339,7 @@ const attendanceChart = new Chart(ctx, {
                     afterBody: (items) => {
                         const i = items[0].dataIndex;
                         const total = chartData.hadir[i] + chartData.izin[i] + chartData.alpa[i];
-                        return [`─────────────`, `Total: ${total} presensi`];
+                        return [`â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€`, `Total: ${total} presensi`];
                     },
                 },
             },
@@ -370,7 +360,7 @@ const attendanceChart = new Chart(ctx, {
     },
 });
 
-// ── Ekspor Detail ──────────────────────────────────────────────────────────
+// â”€â”€ Ekspor Detail â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function eksporChart() {
     const btn = document.getElementById('btn-ekspor');
     btn.disabled = true;
@@ -397,37 +387,11 @@ function eksporChart() {
     }, 600);
 }
 
-// ── Real-time Mode ─────────────────────────────────────────────────────────
-let realtimeActive = false;
-let realtimeTimer  = null;
 
-function toggleRealtime() {
-    const btn   = document.getElementById('btn-realtime');
-    const dot   = document.getElementById('realtime-dot');
-    const label = document.getElementById('realtime-label');
 
-    realtimeActive = !realtimeActive;
 
-    if (realtimeActive) {
-        dot.classList.replace('bg-gray-300', 'bg-green-400');
-        dot.classList.add('animate-pulse');
-        label.textContent = 'Live — Aktif';
-        btn.classList.add('border-green-200', 'text-green-700');
-        btn.classList.remove('border-gray-200', 'text-gray-700');
 
-        // Refresh halaman setiap 30 detik
-        realtimeTimer = setInterval(() => { window.location.reload(); }, 30000);
-    } else {
-        dot.classList.replace('bg-green-400', 'bg-gray-300');
-        dot.classList.remove('animate-pulse');
-        label.textContent = 'Real-time Mode';
-        btn.classList.remove('border-green-200', 'text-green-700');
-        btn.classList.add('border-gray-200', 'text-gray-700');
 
-        clearInterval(realtimeTimer);
-        realtimeTimer = null;
-    }
-}
 </script>
 
 {{-- =============================== --}}
@@ -442,7 +406,7 @@ function toggleRealtime() {
 <!-- Employee greeting -->
 <div class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
     <div>
-        <h2 class="text-xl font-bold text-gray-900">Halo, {{ auth()->user()->name }} 👋</h2>
+        <h2 class="text-xl font-bold text-gray-900">Halo, {{ auth()->user()->name }} ðŸ‘‹</h2>
         <p class="text-sm text-gray-500 mt-0.5">{{ now()->isoFormat('dddd, D MMMM YYYY') }}</p>
     </div>
     <div class="flex items-center gap-2 text-xs font-medium text-gray-500 bg-white border border-gray-200 rounded-xl px-3 py-2">
@@ -467,7 +431,7 @@ function toggleRealtime() {
                         @elseif(!$todayAttendance->end_time)
                             Sudah Check-In &mdash; Belum Check-Out
                         @else
-                            Presensi Selesai ✅
+                            Presensi Selesai âœ…
                         @endif
                     </h3>
                 </div>

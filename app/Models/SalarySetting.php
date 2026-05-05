@@ -17,16 +17,22 @@ class SalarySetting extends Model
         'metode_perhitungan_default',
         'tunjangan_transport_default',
         'tunjangan_makan_default',
+        'tunjangan_jabatan_kepala_divisi',
         'potongan_bpjs_kesehatan_persen',
         'potongan_bpjs_ketenagakerjaan_persen',
+        'potongan_jht_persen',
+        'potongan_jks_persen',
         'catatan',
     ];
 
     protected $casts = [
         'tunjangan_transport_default' => 'decimal:2',
         'tunjangan_makan_default' => 'decimal:2',
+        'tunjangan_jabatan_kepala_divisi' => 'decimal:2',
         'potongan_bpjs_kesehatan_persen' => 'decimal:2',
         'potongan_bpjs_ketenagakerjaan_persen' => 'decimal:2',
+        'potongan_jht_persen' => 'decimal:2',
+        'potongan_jks_persen' => 'decimal:2',
     ];
 
     /**
@@ -45,8 +51,11 @@ class SalarySetting extends Model
                 'metode_perhitungan_default' => 'bulanan',
                 'tunjangan_transport_default' => 0,
                 'tunjangan_makan_default' => 0,
+                'tunjangan_jabatan_kepala_divisi' => 0,
                 'potongan_bpjs_kesehatan_persen' => 1,
                 'potongan_bpjs_ketenagakerjaan_persen' => 2,
+                'potongan_jht_persen' => 2,
+                'potongan_jks_persen' => 1,
             ]);
         }
         

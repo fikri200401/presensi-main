@@ -167,26 +167,6 @@
                             </div>
                         </div>
 
-                        <div>
-                            <label for="tunjangan_jabatan" class="block text-sm font-medium text-gray-900">Tunjangan Jabatan</label>
-                            <div class="mt-2 relative rounded-md shadow-sm">
-                                <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                                    <span class="text-gray-500 sm:text-sm">Rp</span>
-                                </div>
-                                <input type="number" name="tunjangan_jabatan" id="tunjangan_jabatan" min="0" step="1000" value="{{ old('tunjangan_jabatan', 0) }}" class="block w-full rounded-md border-0 py-1.5 pl-12 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm">
-                            </div>
-                        </div>
-
-                        <div>
-                            <label for="tunjangan_keluarga" class="block text-sm font-medium text-gray-900">Tunjangan Keluarga</label>
-                            <div class="mt-2 relative rounded-md shadow-sm">
-                                <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                                    <span class="text-gray-500 sm:text-sm">Rp</span>
-                                </div>
-                                <input type="number" name="tunjangan_keluarga" id="tunjangan_keluarga" min="0" step="1000" value="{{ old('tunjangan_keluarga', 0) }}" class="block w-full rounded-md border-0 py-1.5 pl-12 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm">
-                            </div>
-                        </div>
-
                         <div class="sm:col-span-2">
                             <label for="tunjangan_lainnya" class="block text-sm font-medium text-gray-900">Tunjangan Lainnya</label>
                             <div class="mt-2 relative rounded-md shadow-sm">
@@ -205,30 +185,10 @@
                 <div class="px-4 py-5 sm:p-6 space-y-6">
                     <div>
                         <h3 class="text-lg font-medium leading-6 text-gray-900">Potongan</h3>
-                        <p class="mt-1 text-sm text-gray-500">Default: BPJS Kesehatan {{ $settings->potongan_bpjs_kesehatan_persen }}%, BPJS Ketenagakerjaan {{ $settings->potongan_bpjs_ketenagakerjaan_persen }}%</p>
+                        <p class="mt-1 text-sm text-gray-500">JHT dan JKS diambil dari Pengaturan Gaji saat payroll di-generate.</p>
                     </div>
 
                     <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
-                        <div>
-                            <label for="potongan_bpjs_kesehatan_persen" class="block text-sm font-medium text-gray-900">BPJS Kesehatan (%)</label>
-                            <div class="mt-2 relative rounded-md shadow-sm">
-                                <input type="number" name="potongan_bpjs_kesehatan_persen" id="potongan_bpjs_kesehatan_persen" min="0" max="100" step="0.01" value="{{ old('potongan_bpjs_kesehatan_persen', $settings->potongan_bpjs_kesehatan_persen) }}" class="block w-full rounded-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm">
-                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-                                    <span class="text-gray-500 sm:text-sm">%</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div>
-                            <label for="potongan_bpjs_ketenagakerjaan_persen" class="block text-sm font-medium text-gray-900">BPJS Ketenagakerjaan (%)</label>
-                            <div class="mt-2 relative rounded-md shadow-sm">
-                                <input type="number" name="potongan_bpjs_ketenagakerjaan_persen" id="potongan_bpjs_ketenagakerjaan_persen" min="0" max="100" step="0.01" value="{{ old('potongan_bpjs_ketenagakerjaan_persen', $settings->potongan_bpjs_ketenagakerjaan_persen) }}" class="block w-full rounded-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm">
-                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-                                    <span class="text-gray-500 sm:text-sm">%</span>
-                                </div>
-                            </div>
-                        </div>
-
                         <div>
                             <label for="potongan_pph21" class="block text-sm font-medium text-gray-900">PPH21</label>
                             <div class="mt-2 relative rounded-md shadow-sm">
@@ -250,6 +210,8 @@
                         </div>
                     </div>
                 </div>
+
+                @include('employee-salary.partials.salary-components', ['salaryComponents' => $salaryComponents])
 
                 <!-- Actions -->
                 <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">

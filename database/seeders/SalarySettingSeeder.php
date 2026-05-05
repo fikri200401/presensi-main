@@ -20,8 +20,11 @@ class SalarySettingSeeder extends Seeder
             'metode_perhitungan_default' => 'bulanan',
             'tunjangan_transport_default' => 500000,
             'tunjangan_makan_default' => 750000,
+            'tunjangan_jabatan_kepala_divisi' => 0,
             'potongan_bpjs_kesehatan_persen' => 1.00,
             'potongan_bpjs_ketenagakerjaan_persen' => 2.00,
+            'potongan_jht_persen' => 2.00,
+            'potongan_jks_persen' => 1.00,
         ]);
     }
 }

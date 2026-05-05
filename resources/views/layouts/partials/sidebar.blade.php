@@ -102,8 +102,8 @@
                 Approval Cuti Final
             </a>
 
-            <a href="{{ route('payroll.index') }}" class="{{ request()->routeIs('payroll.*') || request()->routeIs('employee-salary.*') ? 'bg-blue-50 text-blue-600 font-semibold' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }} group flex items-center gap-x-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all">
-                <svg class="h-5 w-5 shrink-0 {{ request()->routeIs('payroll.*') || request()->routeIs('employee-salary.*') ? 'text-blue-600' : 'text-gray-400 group-hover:text-gray-600' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <a href="{{ route('payroll.index') }}" class="{{ request()->routeIs('payroll.*') || request()->routeIs('employee-salary.*') || request()->routeIs('salary-settings.*') ? 'bg-blue-50 text-blue-600 font-semibold' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }} group flex items-center gap-x-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all">
+                <svg class="h-5 w-5 shrink-0 {{ request()->routeIs('payroll.*') || request()->routeIs('employee-salary.*') || request()->routeIs('salary-settings.*') ? 'text-blue-600' : 'text-gray-400 group-hover:text-gray-600' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z" />
                 </svg>
                 Validasi Penggajian
@@ -141,8 +141,8 @@
                 Izin & Cuti
             </a>
 
-            <a href="{{ route('payroll.index') }}" class="{{ request()->routeIs('payroll.*') || request()->routeIs('employee-salary.*') ? 'bg-blue-50 text-blue-600 font-semibold' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }} group flex items-center gap-x-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all">
-                <svg class="h-5 w-5 shrink-0 {{ request()->routeIs('payroll.*') || request()->routeIs('employee-salary.*') ? 'text-blue-600' : 'text-gray-400 group-hover:text-gray-600' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <a href="{{ route('payroll.index') }}" class="{{ request()->routeIs('payroll.*') || request()->routeIs('employee-salary.*') || request()->routeIs('salary-settings.*') ? 'bg-blue-50 text-blue-600 font-semibold' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }} group flex items-center gap-x-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all">
+                <svg class="h-5 w-5 shrink-0 {{ request()->routeIs('payroll.*') || request()->routeIs('employee-salary.*') || request()->routeIs('salary-settings.*') ? 'text-blue-600' : 'text-gray-400 group-hover:text-gray-600' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z" />
                 </svg>
                 Penggajian
@@ -154,6 +154,16 @@
                 </svg>
                 Laporan
             </a>
+
+            @can('view_any_setting')
+            <a href="{{ route('settings.index') }}" class="{{ request()->routeIs('settings.*') ? 'bg-blue-50 text-blue-600 font-semibold' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }} group flex items-center gap-x-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all">
+                <svg class="h-5 w-5 shrink-0 {{ request()->routeIs('settings.*') ? 'text-blue-600' : 'text-gray-400 group-hover:text-gray-600' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.195.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a7.723 7.723 0 010 .255c-.007.379.138.752.431.992l1.003.827c.424.35.534.955.26 1.431l-1.296 2.247a1.125 1.125 0 01-1.37.49l-1.217-.456c-.355-.133-.751-.071-1.075.124a6.47 6.47 0 01-.22.127c-.332.184-.582.496-.645.87l-.213 1.281c-.09.542-.56.94-1.11.94h-2.593c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.063-.374-.313-.686-.645-.87a6.52 6.52 0 01-.22-.127c-.324-.195-.72-.257-1.075-.124l-1.217.456a1.125 1.125 0 01-1.37-.49l-1.296-2.247a1.125 1.125 0 01.26-1.431l1.003-.827c.293-.24.438-.613.431-.992a7.723 7.723 0 010-.255c.007-.379-.138-.752-.431-.992l-1.003-.827a1.125 1.125 0 01-.26-1.431l1.296-2.247a1.125 1.125 0 011.37-.49l1.217.456c.355.133.751.071 1.075-.124.073-.044.146-.087.22-.127.332-.184.582-.496.645-.87l.213-1.281z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                Pengaturan
+            </a>
+            @endcan
         </div>
         @endif
 

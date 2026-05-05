@@ -1,9 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-<!-- SweetAlert2 -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
 <div class="px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
     <div class="sm:flex sm:items-center mb-6">
         <div class="sm:flex-auto">
@@ -13,12 +10,14 @@
             </p>
         </div>
         <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none flex gap-2">
+            @if($payroll->status === 'approved')
             <a href="{{ route('payroll.exportPdf', $payroll->id) }}" target="_blank" class="inline-flex items-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500">
                 <svg class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
                 </svg>
                 Cetak Slip Gaji
             </a>
+            @endif
             <a href="{{ route('payroll.index') }}" class="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
                 <svg class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -42,7 +41,6 @@
                         {{ $payroll->status === 'draft' ? 'bg-gray-100 text-gray-800' : '' }}
                         {{ $payroll->status === 'pending' ? 'bg-yellow-100 text-yellow-800' : '' }}
                         {{ $payroll->status === 'approved' ? 'bg-green-100 text-green-800' : '' }}
-                        {{ $payroll->status === 'paid' ? 'bg-blue-100 text-blue-800' : '' }}
                         {{ $payroll->status === 'rejected' ? 'bg-red-100 text-red-800' : '' }}">
                         {{ ucfirst($payroll->status) }}
                     </div>
@@ -126,12 +124,24 @@
                         <span>Rp {{ number_format($payroll->tunjangan_makan, 0, ',', '.') }}</span>
                     </div>
                     @endif
+                    @if($payroll->tunjangan_jabatan > 0)
+                    <div class="flex justify-between text-gray-700">
+                        <span>Tunjangan Jabatan</span>
+                        <span>Rp {{ number_format($payroll->tunjangan_jabatan, 0, ',', '.') }}</span>
+                    </div>
+                    @endif
                     @if($payroll->tunjangan_lainnya > 0)
                     <div class="flex justify-between text-gray-700">
                         <span>Tunjangan Lainnya</span>
                         <span>Rp {{ number_format($payroll->tunjangan_lainnya, 0, ',', '.') }}</span>
                     </div>
                     @endif
+                    @foreach($payroll->components->where('type', 'allowance') as $component)
+                    <div class="flex justify-between text-gray-700">
+                        <span>{{ $component->name }}</span>
+                        <span>Rp {{ number_format($component->amount, 0, ',', '.') }}</span>
+                    </div>
+                    @endforeach
                     <div class="flex justify-between font-semibold text-green-700 pt-2 border-t">
                         <span>Total Tunjangan</span>
                         <span>Rp {{ number_format($payroll->total_tunjangan, 0, ',', '.') }}</span>
@@ -154,6 +164,18 @@
                         <span class="text-red-600">- Rp {{ number_format($payroll->potongan_bpjs_ketenagakerjaan, 0, ',', '.') }}</span>
                     </div>
                     @endif
+                    @if($payroll->potongan_jht > 0)
+                    <div class="flex justify-between text-gray-700">
+                        <span>JHT</span>
+                        <span class="text-red-600">- Rp {{ number_format($payroll->potongan_jht, 0, ',', '.') }}</span>
+                    </div>
+                    @endif
+                    @if($payroll->potongan_jks > 0)
+                    <div class="flex justify-between text-gray-700">
+                        <span>JKS / BPJS Kesehatan</span>
+                        <span class="text-red-600">- Rp {{ number_format($payroll->potongan_jks, 0, ',', '.') }}</span>
+                    </div>
+                    @endif
                     @if($payroll->potongan_pph21 > 0)
                     <div class="flex justify-between text-gray-700">
                         <span>PPH21</span>
@@ -166,12 +188,27 @@
                         <span class="text-red-600">- Rp {{ number_format($payroll->potongan_keterlambatan, 0, ',', '.') }}</span>
                     </div>
                     @endif
+                    @if($payroll->potongan_manual > 0)
+                    <div class="flex justify-between text-gray-700">
+                        <span>Potongan Manual</span>
+                        <span class="text-red-600">- Rp {{ number_format($payroll->potongan_manual, 0, ',', '.') }}</span>
+                    </div>
+                    @if($payroll->keterangan_potongan_manual)
+                    <p class="text-xs text-gray-500">{{ $payroll->keterangan_potongan_manual }}</p>
+                    @endif
+                    @endif
                     @if($payroll->potongan_lainnya > 0)
                     <div class="flex justify-between text-gray-700">
                         <span>Potongan Lainnya</span>
                         <span class="text-red-600">- Rp {{ number_format($payroll->potongan_lainnya, 0, ',', '.') }}</span>
                     </div>
                     @endif
+                    @foreach($payroll->components->where('type', 'deduction') as $component)
+                    <div class="flex justify-between text-gray-700">
+                        <span>{{ $component->name }}</span>
+                        <span class="text-red-600">- Rp {{ number_format($component->amount, 0, ',', '.') }}</span>
+                    </div>
+                    @endforeach
                     <div class="flex justify-between font-semibold text-red-700 pt-2 border-t">
                         <span>Total Potongan</span>
                         <span>- Rp {{ number_format($payroll->total_potongan, 0, ',', '.') }}</span>
@@ -193,7 +230,7 @@
         </div>
 
         <!-- Approval Info -->
-        @if($payroll->status === 'approved' || $payroll->status === 'paid')
+        @if($payroll->status === 'approved')
         <div class="px-6 py-4 bg-green-50 border-t border-green-200">
             <div class="flex items-start">
                 <svg class="h-5 w-5 text-green-400 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
@@ -226,18 +263,47 @@
         </div>
         @endif
 
-        <!-- Actions (Admin Only) -->
-        @if(auth()->user()->hasAnyRole(['super_admin', 'admin', 'direksi']))
-        @if($payroll->status === 'approved')
-        <div class="px-6 py-4 bg-gray-50 border-t border-gray-200 flex justify-end">
-            <button onclick="markAsPaid()" class="inline-flex items-center rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500">
-                <svg class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                Tandai Sudah Dibayar
-            </button>
-        </div>
+        <!-- Actions -->
+        @if(auth()->user()->hasAnyRole(['super_admin', 'admin']))
+            @if($payroll->status === 'draft')
+            <div class="px-6 py-4 bg-gray-50 border-t border-gray-200">
+                <form method="POST" action="{{ route('payroll.updateDeductions', $payroll) }}" class="grid grid-cols-1 gap-4 md:grid-cols-3">
+                    @csrf
+                    @method('PUT')
+                    <div>
+                        <label for="potongan_manual" class="block text-sm font-medium text-gray-700">Potongan Manual</label>
+                        <input type="number" min="0" step="1000" id="potongan_manual" name="potongan_manual" value="{{ old('potongan_manual', $payroll->potongan_manual) }}" class="mt-2 block w-full rounded-md border-gray-300 text-sm focus:border-blue-500 focus:ring-blue-500">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label for="keterangan_potongan_manual" class="block text-sm font-medium text-gray-700">Keterangan</label>
+                        <input type="text" id="keterangan_potongan_manual" name="keterangan_potongan_manual" value="{{ old('keterangan_potongan_manual', $payroll->keterangan_potongan_manual) }}" class="mt-2 block w-full rounded-md border-gray-300 text-sm focus:border-blue-500 focus:ring-blue-500">
+                    </div>
+                    <div class="md:col-span-3 flex flex-wrap justify-end gap-2">
+                        <button type="submit" class="inline-flex items-center rounded-md bg-white px-4 py-2 text-sm font-semibold text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">Simpan Potongan</button>
+                    </div>
+                </form>
+                <form method="POST" action="{{ route('payroll.submit', $payroll) }}" class="mt-3 flex justify-end">
+                    @csrf
+                    <button type="submit" class="inline-flex items-center rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500">Ajukan Approval</button>
+                </form>
+            </div>
+            @endif
         @endif
+
+        @if(auth()->user()->hasAnyRole(['super_admin', 'admin', 'direksi']) && $payroll->status === 'pending')
+        <div class="px-6 py-4 bg-gray-50 border-t border-gray-200">
+            <div class="flex flex-col gap-3 md:flex-row md:items-start md:justify-end">
+                <form method="POST" action="{{ route('payroll.reject', $payroll) }}" class="flex flex-1 flex-col gap-2 md:max-w-md">
+                    @csrf
+                    <input type="text" name="catatan" placeholder="Alasan jika ditolak" class="block w-full rounded-md border-gray-300 text-sm focus:border-blue-500 focus:ring-blue-500">
+                    <button type="submit" class="inline-flex items-center justify-center rounded-md bg-white px-4 py-2 text-sm font-semibold text-red-600 shadow-sm ring-1 ring-inset ring-red-200 hover:bg-red-50">Tolak</button>
+                </form>
+                <form method="POST" action="{{ route('payroll.approve', $payroll) }}">
+                    @csrf
+                    <button type="submit" class="inline-flex w-full items-center justify-center rounded-md bg-green-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 md:w-auto">Approve Slip</button>
+                </form>
+            </div>
+        </div>
         @endif
 
         <!-- Footer -->
@@ -247,34 +313,4 @@
         </div>
     </div>
 </div>
-
-<script>
-function markAsPaid() {
-    Swal.fire({
-        title: 'Tandai Sudah Dibayar?',
-        text: 'Tandai payroll ini sebagai sudah dibayar?',
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonColor: '#3b82f6',
-        cancelButtonColor: '#6b7280',
-        confirmButtonText: 'Ya, Sudah Dibayar',
-        cancelButtonText: 'Batal'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            const form = document.createElement('form');
-            form.method = 'POST';
-            form.action = '{{ route('payroll.markAsPaid', $payroll->id) }}';
-            
-            const csrfToken = document.createElement('input');
-            csrfToken.type = 'hidden';
-            csrfToken.name = '_token';
-            csrfToken.value = '{{ csrf_token() }}';
-            form.appendChild(csrfToken);
-            
-            document.body.appendChild(form);
-            form.submit();
-        }
-    });
-}
-</script>
 @endsection
