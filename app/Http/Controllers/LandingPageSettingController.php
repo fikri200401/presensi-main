@@ -68,7 +68,7 @@ class LandingPageSettingController extends Controller
             'footer_links.*.*.label' => 'nullable|string|max:80',
             'footer_links.*.*.url' => 'nullable|string|max:255',
             'copyright_text' => 'required|string|max:160',
-        ]);
+        ], $this->validationMessages());
 
         foreach (['logo_image', 'hero_image', 'feature_image'] as $field) {
             $removeField = 'remove_' . $field;
@@ -107,6 +107,24 @@ class LandingPageSettingController extends Controller
             ->filter(fn (array $item) => collect($item)->filter()->isNotEmpty())
             ->values()
             ->all();
+    }
+
+    private function validationMessages(): array
+    {
+        return [
+            'logo_image.uploaded' => 'Logo gagal diunggah. Ukuran file kemungkinan melebihi batas upload server atau maksimal 4MB.',
+            'logo_image.image' => 'Logo harus berupa file gambar.',
+            'logo_image.mimes' => 'Logo harus berformat JPG, PNG, atau WEBP.',
+            'logo_image.max' => 'Logo maksimal 4MB.',
+            'hero_image.uploaded' => 'Foto hero gagal diunggah. Ukuran file kemungkinan melebihi batas upload server atau maksimal 4MB.',
+            'hero_image.image' => 'Foto hero harus berupa file gambar.',
+            'hero_image.mimes' => 'Foto hero harus berformat JPG, PNG, atau WEBP.',
+            'hero_image.max' => 'Foto hero maksimal 4MB.',
+            'feature_image.uploaded' => 'Foto preview fitur gagal diunggah. Ukuran file kemungkinan melebihi batas upload server atau maksimal 4MB.',
+            'feature_image.image' => 'Foto preview fitur harus berupa file gambar.',
+            'feature_image.mimes' => 'Foto preview fitur harus berformat JPG, PNG, atau WEBP.',
+            'feature_image.max' => 'Foto preview fitur maksimal 4MB.',
+        ];
     }
 
     private function cleanFooterLinks(array $footerLinks): array
