@@ -3,6 +3,10 @@
 @section('title', 'Login')
 
 @section('content')
+@php
+    $setting = $landingSetting ?? \App\Models\LandingPageSetting::current();
+@endphp
+
 <div class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50 flex flex-col">
 
     <!-- Top bar -->
@@ -23,13 +27,17 @@
 
                 <!-- Logo & Title -->
                 <div class="text-center mb-8">
-                    <div class="inline-flex items-center justify-center w-14 h-14 bg-blue-600 rounded-2xl shadow-lg shadow-blue-200 mb-4">
-                        <svg class="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
-                        </svg>
-                    </div>
-                    <h2 class="text-2xl font-bold text-gray-900 mb-1">Masuk ke Portal</h2>
-                    <p class="text-sm text-gray-500">Masukkan kredensial Anda untuk mengakses sistem HRIS</p>
+                    @if($setting->logo_url)
+                        <img src="{{ $setting->logo_url }}" alt="{{ $setting->brand_name }}" class="mx-auto mb-4 h-16 w-16 rounded-2xl border border-gray-100 bg-white object-contain p-2 shadow-lg shadow-blue-100">
+                    @else
+                        <div class="inline-flex items-center justify-center w-14 h-14 bg-blue-600 rounded-2xl shadow-lg shadow-blue-200 mb-4">
+                            <svg class="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
+                            </svg>
+                        </div>
+                    @endif
+                    <h2 class="text-2xl font-bold text-gray-900 mb-1">{{ $setting->brand_name }}</h2>
+                    <p class="text-sm text-gray-500">{{ $setting->brand_subtitle ?: 'Masukkan kredensial Anda untuk mengakses sistem HRIS' }}</p>
                 </div>
 
                 @if(session('error'))
@@ -196,7 +204,7 @@
             <a href="{{ route('info.it-support') }}" class="hover:text-gray-600">IT Helpdesk</a>
         </div>
     </div>
-    <p class="text-center text-xs text-gray-400 pb-4">© {{ date('Y') }} HRIS Internal Portal. All rights reserved.</p>
+    <p class="text-center text-xs text-gray-400 pb-4">© {{ date('Y') }} {{ $setting->copyright_text }}</p>
 </div>
 
 <script>
