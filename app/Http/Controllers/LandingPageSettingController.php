@@ -45,7 +45,7 @@ class LandingPageSettingController extends Controller
             'hero_primary_button_label' => 'required|string|max:60',
             'hero_secondary_button_label' => 'required|string|max:60',
             'hero_secondary_button_url' => 'required|string|max:255',
-            'hero_image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
+            'hero_image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:8192',
             'remove_hero_image' => 'nullable|boolean',
             'features_title' => 'required|string|max:120',
             'features_description' => 'nullable|string|max:500',
