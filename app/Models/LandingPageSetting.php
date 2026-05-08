@@ -160,7 +160,7 @@ class LandingPageSetting extends Model
     public static function defaultFeatures(): array
     {
         return [
-            ['title' => 'Absensi & Kehadiran', 'description' => 'Pantau riwayat kehadiran dan lakukan clock-in/out melalui sistem Face Recognition yang presisi.'],
+            ['title' => 'Absensi & Kehadiran', 'description' => 'Pantau riwayat kehadiran dan lakukan clock-in/out melalui sistem maps yang presisi.'],
             ['title' => 'Manajemen Cuti', 'description' => 'Ajukan cuti atau izin dengan persetujuan digital cepat. Pantau sisa kuota cuti tahunan Anda secara real-time.'],
             ['title' => 'Profil Karyawan', 'description' => 'Kelola data pribadi, informasi kontrak, dan riwayat promosi Anda dalam satu tempat yang aman.'],
         ];
