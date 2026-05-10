@@ -2,11 +2,14 @@
 
 namespace Tests\Feature;
 
+use App\Http\Controllers\PayrollController;
 use App\Models\Payroll;
 use App\Models\User;
+use Closure;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\PermissionRegistrar;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Tests\TestCase;
 
 class PayrollRouteTest extends TestCase
@@ -39,6 +42,33 @@ class PayrollRouteTest extends TestCase
             ->get(route('payroll.exportPdf', $payroll))
             ->assertOk()
             ->assertSee('SLIP GAJI');
+    }
+
+    public function test_employee_can_view_approved_payroll_when_database_returns_user_id_as_string(): void
+    {
+        Role::create(['name' => 'employee']);
+        $user = User::factory()->create();
+        $user->assignRole('employee');
+        $payroll = $this->approvedPayrollFor($user);
+
+        $attributes = $payroll->getAttributes();
+        $attributes['user_id'] = (string) $user->id;
+        $payroll->setRawAttributes($attributes, true);
+
+        $this->actingAs($user);
+
+        $authorize = Closure::bind(
+            fn (Payroll $payroll) => $this->authorizePayrollVisibility($payroll),
+            app(PayrollController::class),
+            PayrollController::class,
+        );
+
+        try {
+            $authorize($payroll);
+            $this->assertTrue(true);
+        } catch (HttpExceptionInterface $exception) {
+            $this->fail("Expected employee payroll visibility to be allowed, got {$exception->getStatusCode()}.");
+        }
     }
 
     private function approvedPayrollFor(User $user): Payroll

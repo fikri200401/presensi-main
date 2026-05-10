@@ -389,7 +389,9 @@ class PayrollController extends Controller
             return;
         }
 
-        abort_unless($payroll->user_id === Auth::id() && $payroll->status === 'approved', 403);
+        $userId = Auth::id();
+
+        abort_unless($userId !== null && (int) $payroll->user_id === (int) $userId && $payroll->status === 'approved', 403);
     }
 
     private function canViewPayrollAsManager(): bool
