@@ -1,4 +1,4 @@
-﻿@extends('layouts.app')
+@extends('layouts.app')
 
 @section('title', 'Dashboard')
 @section('page-title', 'Dashboard')
@@ -276,7 +276,7 @@
 {{-- =============================== --}}
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
 <script>
-// â”€â”€ Chart.js â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// Chart.js
 const chartData = {
     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun'],
     hadir:  [432, 510, 360, 540, 480, 570],
@@ -339,7 +339,7 @@ const attendanceChart = new Chart(ctx, {
                     afterBody: (items) => {
                         const i = items[0].dataIndex;
                         const total = chartData.hadir[i] + chartData.izin[i] + chartData.alpa[i];
-                        return [`â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€`, `Total: ${total} presensi`];
+                        return ['-------------', `Total: ${total} presensi`];
                     },
                 },
             },
@@ -360,7 +360,7 @@ const attendanceChart = new Chart(ctx, {
     },
 });
 
-// â”€â”€ Ekspor Detail â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// Ekspor Detail
 function eksporChart() {
     const btn = document.getElementById('btn-ekspor');
     btn.disabled = true;
@@ -406,7 +406,7 @@ function eksporChart() {
 <!-- Employee greeting -->
 <div class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
     <div>
-        <h2 class="text-xl font-bold text-gray-900">Halo, {{ auth()->user()->name }} ðŸ‘‹</h2>
+        <h2 class="text-xl font-bold text-gray-900">Halo, {{ auth()->user()->name }}</h2>
         <p class="text-sm text-gray-500 mt-0.5">{{ now()->isoFormat('dddd, D MMMM YYYY') }}</p>
     </div>
     <div class="flex items-center gap-2 text-xs font-medium text-gray-500 bg-white border border-gray-200 rounded-xl px-3 py-2">
@@ -431,7 +431,7 @@ function eksporChart() {
                         @elseif(!$todayAttendance->end_time)
                             Sudah Check-In &mdash; Belum Check-Out
                         @else
-                            Presensi Selesai âœ…
+                            Presensi Selesai
                         @endif
                     </h3>
                 </div>
