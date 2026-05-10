@@ -82,8 +82,10 @@ Route::middleware('auth')->group(function() {
     Route::post('payroll/{payroll}/submit', [PayrollController::class, 'submit'])->name('payroll.submit');
     Route::post('payroll/{payroll}/approve', [PayrollController::class, 'approve'])->name('payroll.approve');
     Route::post('payroll/{payroll}/reject', [PayrollController::class, 'reject'])->name('payroll.reject');
-    Route::get('payroll/{payroll}', [PayrollController::class, 'show'])->name('payroll.show');
-    Route::get('payroll/{payroll}/export-pdf', [PayrollController::class, 'exportPdf'])->name('payroll.exportPdf');
+    Route::get('payroll/detail/{payroll}', [PayrollController::class, 'show'])->name('payroll.show');
+    Route::get('payroll/print/{payroll}', [PayrollController::class, 'exportPdf'])->name('payroll.exportPdf');
+    Route::get('payroll/{payroll}', [PayrollController::class, 'show']);
+    Route::get('payroll/{payroll}/export-pdf', [PayrollController::class, 'exportPdf']);
     Route::delete('payroll/{payroll}', [PayrollController::class, 'destroy'])->name('payroll.destroy');
     
     // Employee Salary routes
