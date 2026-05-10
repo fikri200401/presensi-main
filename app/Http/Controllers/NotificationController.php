@@ -38,7 +38,9 @@ class NotificationController extends Controller
     /** POST /notifications/{id}/read — tandai satu notif sebagai dibaca */
     public function markRead(Notification $notification): JsonResponse
     {
-        abort_if($notification->user_id !== auth()->id(), 403);
+        $userId = auth()->id();
+
+        abort_if($userId === null || (int) $notification->user_id !== (int) $userId, 403);
 
         $notification->update(['read_at' => now()]);
 

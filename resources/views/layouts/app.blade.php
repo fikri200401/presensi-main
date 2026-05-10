@@ -448,7 +448,7 @@
                 this.unreadCount = Math.max(0, this.unreadCount - 1);
                 
                 try {
-                    await fetch(`/notifications/${notif.id}/read`, {
+                    await fetch(`{{ url('notifications') }}/${notif.id}/read`, {
                         method: 'POST',
                         headers: {
                             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
@@ -468,7 +468,7 @@
             async markAllRead() {
                 this.notifications.forEach(n => n.is_read = true);
                 this.unreadCount = 0;
-                await fetch('/notifications/read-all', {
+                await fetch('{{ route("notifications.read-all") }}', {
                     method: 'POST',
                     headers: {
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
