@@ -89,7 +89,7 @@
                         </div>
                         <div>
                             <p class="text-xs text-gray-400 uppercase font-semibold tracking-wider">Telepon / WA</p>
-                            <p class="text-sm font-medium text-gray-900 mt-0.5">{{ $user->phone ?? '—' }}</p>
+                            <p class="text-sm font-medium text-gray-900 mt-0.5">{{ $user->phone ?? '-' }}</p>
                         </div>
                     </div>
                     <div class="flex items-start gap-3 p-4 bg-gray-50 rounded-xl">
@@ -98,7 +98,7 @@
                         </div>
                         <div>
                             <p class="text-xs text-gray-400 uppercase font-semibold tracking-wider">Alamat Domisili</p>
-                            <p class="text-sm font-medium text-gray-900 mt-0.5">{{ $user->address ?? '—' }}</p>
+                            <p class="text-sm font-medium text-gray-900 mt-0.5">{{ $user->address ?? '-' }}</p>
                         </div>
                     </div>
                     <div class="flex items-start gap-3 p-4 bg-gray-50 rounded-xl">
@@ -107,7 +107,7 @@
                         </div>
                         <div>
                             <p class="text-xs text-gray-400 uppercase font-semibold tracking-wider">Tanggal Lahir</p>
-                            <p class="text-sm font-medium text-gray-900 mt-0.5">{{ $user->birth_date ? $user->birth_date->translatedFormat('d F Y') : '—' }}</p>
+                            <p class="text-sm font-medium text-gray-900 mt-0.5">{{ $user->birth_date ? $user->birth_date->translatedFormat('d F Y') : '-' }}</p>
                         </div>
                     </div>
                     <div class="flex items-start gap-3 p-4 bg-gray-50 rounded-xl">
@@ -116,7 +116,7 @@
                         </div>
                         <div>
                             <p class="text-xs text-gray-400 uppercase font-semibold tracking-wider">Divisi</p>
-                            <p class="text-sm font-medium text-gray-900 mt-0.5">{{ $user->division ?? '—' }}</p>
+                            <p class="text-sm font-medium text-gray-900 mt-0.5">{{ $user->division ?? '-' }}</p>
                         </div>
                     </div>
                     <div class="flex items-start gap-3 p-4 bg-gray-50 rounded-xl">

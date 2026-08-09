@@ -431,7 +431,7 @@
             } else {
                 html += `<div class="flex items-start gap-3 p-3 rounded-xl bg-gray-50 border border-gray-100">
                     <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0">
-                        <span class="text-xs font-bold text-gray-400">—</span>
+                        <span class="text-xs font-bold text-gray-400">-</span>
                     </div>
                     <div>
                         <p class="text-sm font-semibold text-gray-400">${s.label}</p>

@@ -101,11 +101,11 @@ class RolePermissionSeeder extends Seeder
             Permission::firstOrCreate(['name' => $permission]);
         }
 
-        // ===== SUPER ADMIN — Full access =====
+        // ===== SUPER ADMIN - Full access =====
         $superAdminRole = Role::firstOrCreate(['name' => 'super_admin']);
         $superAdminRole->givePermissionTo(Permission::all());
 
-        // ===== ADMIN / HR — Manage master data, approve leave layer 2, manage payroll =====
+        // ===== ADMIN / HR - Manage master data, approve leave layer 2, manage payroll =====
         $adminRole = Role::firstOrCreate(['name' => 'admin']);
         $adminRole->givePermissionTo([
             'view_user', 'view_any_user', 'create_user', 'update_user',
@@ -120,7 +120,7 @@ class RolePermissionSeeder extends Seeder
             'view_setting', 'view_any_setting', 'update_setting',
         ]);
 
-        // ===== DIREKSI — Final approval leave, view reports =====
+        // ===== DIREKSI - Final approval leave, view reports =====
         $direksiRole = Role::firstOrCreate(['name' => 'direksi']);
         $direksiRole->givePermissionTo([
             'view_attendance', 'view_any_attendance',
@@ -129,7 +129,7 @@ class RolePermissionSeeder extends Seeder
             'view_user', 'view_any_user',
         ]);
 
-        // ===== KEPALA DIVISI — Approve leave layer 1, view team attendance =====
+        // ===== KEPALA DIVISI - Approve leave layer 1, view team attendance =====
         $kadivRole = Role::firstOrCreate(['name' => 'kepala_divisi']);
         $kadivRole->givePermissionTo([
             'view_attendance', 'view_any_attendance',
@@ -139,7 +139,7 @@ class RolePermissionSeeder extends Seeder
             'view_user', 'view_any_user',
         ]);
 
-        // ===== EMPLOYEE — Self-service only =====
+        // ===== EMPLOYEE - Self-service only =====
         $employeeRole = Role::firstOrCreate(['name' => 'employee']);
         $employeeRole->givePermissionTo([
             'view_attendance',

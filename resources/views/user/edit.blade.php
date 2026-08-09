@@ -48,7 +48,7 @@
                 <label for="division" class="block text-sm font-medium text-gray-700">Divisi</label>
                 <select id="division" name="division"
                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
-                    <option value="">— Pilih Divisi —</option>
+                    <option value="">- Pilih Divisi -</option>
                     @foreach(\App\Models\Division::dropdown() as $key => $label)
                         <option value="{{ $key }}" {{ old('division', $user->division) == $key ? 'selected' : '' }}>{{ $label }}</option>
                     @endforeach
@@ -122,7 +122,7 @@
                             <label class="block text-xs font-medium text-gray-700">Divisi</label>
                             <select name="division" x-model="editData.division"
                                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
-                                <option value="">— Pilih Divisi —</option>
+                                <option value="">- Pilih Divisi -</option>
                                 @foreach(\App\Models\Division::dropdown() as $key => $label)
                                     <option value="{{ $key }}">{{ $label }}</option>
                                 @endforeach
@@ -132,7 +132,7 @@
                             <label class="block text-xs font-medium text-gray-700">Role Sistem</label>
                             <select name="role" x-model="editData.role"
                                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
-                                <option value="">— Pilih —</option>
+                                <option value="">- Pilih -</option>
                                 <option value="employee">Employee</option>
                                 <option value="kepala_divisi">Kepala Divisi</option>
                                 <option value="admin">Admin</option>

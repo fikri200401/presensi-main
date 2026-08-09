@@ -143,7 +143,7 @@
                             <td class="px-5 py-3.5">
                                 <span class="text-sm font-semibold text-gray-900">{{ $division->name }}</span>
                             </td>
-                            <td class="px-5 py-3.5 text-sm text-gray-500">{{ $division->description ?? '—' }}</td>
+                            <td class="px-5 py-3.5 text-sm text-gray-500">{{ $division->description ?? '-' }}</td>
                             <td class="px-5 py-3.5 text-center">
                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $division->users_count > 0 ? 'bg-blue-50 text-blue-700' : 'bg-gray-100 text-gray-500' }}">
                                     {{ $division->users_count }} orang

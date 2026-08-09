@@ -14,7 +14,7 @@
                 <h3 class="text-gray-900 font-semibold">Fitur Utama</h3>
                 <ul class="list-disc pl-5 space-y-1"><li>Manajemen data karyawan dan jabatan</li><li>Presensi GPS-based dengan radius kantor</li><li>Pengajuan cuti dengan approval 3 level (Kadiv → HR → Direksi)</li><li>Slip gaji digital dan penggajian</li><li>Dashboard real-time dengan statistik</li><li>Notifikasi otomatis</li></ul>
                 <h3 class="text-gray-900 font-semibold">Role & Hak Akses</h3>
-                <ul class="list-disc pl-5 space-y-1"><li><strong>Super Admin</strong> — Full access ke semua fitur</li><li><strong>Admin / HR</strong> — Kelola master data, approval cuti level 2</li><li><strong>Kepala Divisi</strong> — Approval cuti level 1, lihat laporan</li><li><strong>Direksi</strong> — Final approval cuti, validasi gaji</li><li><strong>Karyawan</strong> — Presensi, ajukan cuti, lihat slip gaji</li></ul>
+                <ul class="list-disc pl-5 space-y-1"><li><strong>Super Admin</strong> - Full access ke semua fitur</li><li><strong>Admin / HR</strong> - Kelola master data, approval cuti level 2</li><li><strong>Kepala Divisi</strong> - Approval cuti level 1, lihat laporan</li><li><strong>Direksi</strong> - Final approval cuti, validasi gaji</li><li><strong>Karyawan</strong> - Presensi, ajukan cuti, lihat slip gaji</li></ul>
             </div>
         </div>
     </div>

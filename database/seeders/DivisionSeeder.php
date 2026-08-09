@@ -16,23 +16,23 @@ class DivisionSeeder extends Seeder
         $divisions = [
             [
                 'name' => 'HRD',
-                'description' => 'Human Resource Development — mengelola SDM, rekrutmen, dan administrasi kepegawaian.',
+                'description' => 'Human Resource Development - mengelola SDM, rekrutmen, dan administrasi kepegawaian.',
             ],
             [
                 'name' => 'IT',
-                'description' => 'Information Technology — mengelola infrastruktur teknologi, pengembangan sistem, dan support.',
+                'description' => 'Information Technology - mengelola infrastruktur teknologi, pengembangan sistem, dan support.',
             ],
             [
                 'name' => 'Keuangan',
-                'description' => 'Divisi Keuangan — mengelola anggaran, akuntansi, dan pelaporan keuangan.',
+                'description' => 'Divisi Keuangan - mengelola anggaran, akuntansi, dan pelaporan keuangan.',
             ],
             [
                 'name' => 'Marketing',
-                'description' => 'Divisi Marketing — mengelola pemasaran produk, branding, dan hubungan nasabah.',
+                'description' => 'Divisi Marketing - mengelola pemasaran produk, branding, dan hubungan nasabah.',
             ],
             [
                 'name' => 'Operasional',
-                'description' => 'Divisi Operasional — mengelola operasional harian, teller, dan layanan nasabah.',
+                'description' => 'Divisi Operasional - mengelola operasional harian, teller, dan layanan nasabah.',
             ],
         ];
 

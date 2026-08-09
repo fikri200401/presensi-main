@@ -81,7 +81,7 @@
                         </div>
                     </td>
                     <td class="px-6 py-3.5 whitespace-nowrap text-sm text-gray-500">{{ $user->email }}</td>
-                    <td class="px-6 py-3.5 whitespace-nowrap text-sm text-gray-500">{{ $user->division ?? '—' }}</td>
+                    <td class="px-6 py-3.5 whitespace-nowrap text-sm text-gray-500">{{ $user->division ?? '-' }}</td>
                     <td class="px-6 py-3.5 whitespace-nowrap">
                         <div class="flex gap-1 flex-wrap">
                             @foreach($user->roles as $role)

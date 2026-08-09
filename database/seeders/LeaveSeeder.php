@@ -78,7 +78,7 @@ class LeaveSeeder extends Seeder
                 ];
 
                 if ($statusRand <= 30) {
-                    // ── APPROVED (final — semua 3 layer approve) ──
+                    // ── APPROVED (final - semua 3 layer approve) ──
                     $data['status'] = 'approved';
                     $data['note'] = 'Pengajuan cuti disetujui semua pihak.';
                     // Layer 1

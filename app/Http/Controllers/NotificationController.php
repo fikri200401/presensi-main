@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class NotificationController extends Controller
 {
-    /** GET /notifications — ambil 15 notif terbaru milik user login */
+    /** GET /notifications - ambil 15 notif terbaru milik user login */
     public function index(): JsonResponse
     {
         $notifications = Notification::forUser(auth()->id())
@@ -35,7 +35,7 @@ class NotificationController extends Controller
         ]);
     }
 
-    /** POST /notifications/{id}/read — tandai satu notif sebagai dibaca */
+    /** POST /notifications/{id}/read - tandai satu notif sebagai dibaca */
     public function markRead(Notification $notification): JsonResponse
     {
         $userId = auth()->id();
@@ -47,7 +47,7 @@ class NotificationController extends Controller
         return response()->json(['success' => true]);
     }
 
-    /** POST /notifications/read-all — tandai semua notif sebagai dibaca */
+    /** POST /notifications/read-all - tandai semua notif sebagai dibaca */
     public function markAllRead(): JsonResponse
     {
         Notification::forUser(auth()->id())

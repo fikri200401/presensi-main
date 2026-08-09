@@ -1,4 +1,4 @@
-# HRIS BPRS — Human Resource Information System
+# HRIS BPRS - Human Resource Information System
 
 Sistem informasi manajemen SDM (HRIS) berbasis web untuk BPRS (Bank Pembiayaan Rakyat Syariah). Dibangun dengan Laravel 11, Filament 3, Livewire, dan TailwindCSS.
 

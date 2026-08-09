@@ -130,7 +130,7 @@ class LeaveController extends Controller
     }
 
     /**
-     * Approve leave — Layer 1: Kepala Divisi
+     * Approve leave - Layer 1: Kepala Divisi
      */
     public function approveKadiv(Leave $leave)
     {
@@ -159,7 +159,7 @@ class LeaveController extends Controller
     }
 
     /**
-     * Reject leave — Layer 1: Kepala Divisi
+     * Reject leave - Layer 1: Kepala Divisi
      */
     public function rejectKadiv(Request $request, Leave $leave)
     {
@@ -193,7 +193,7 @@ class LeaveController extends Controller
     }
 
     /**
-     * Approve leave — Layer 2: HR / Admin
+     * Approve leave - Layer 2: HR / Admin
      */
     public function approveHr(Leave $leave)
     {
@@ -217,7 +217,7 @@ class LeaveController extends Controller
     }
 
     /**
-     * Reject leave — Layer 2: HR / Admin
+     * Reject leave - Layer 2: HR / Admin
      */
     public function rejectHr(Request $request, Leave $leave)
     {
@@ -246,7 +246,7 @@ class LeaveController extends Controller
     }
 
     /**
-     * Approve leave — Layer 3: Direksi (Final)
+     * Approve leave - Layer 3: Direksi (Final)
      */
     public function approveDireksi(Leave $leave)
     {
@@ -270,7 +270,7 @@ class LeaveController extends Controller
     }
 
     /**
-     * Reject leave — Layer 3: Direksi
+     * Reject leave - Layer 3: Direksi
      */
     public function rejectDireksi(Request $request, Leave $leave)
     {
@@ -299,7 +299,7 @@ class LeaveController extends Controller
     }
 
     /**
-     * Legacy approve — for super_admin quick approve (all layers at once)
+     * Legacy approve - for super_admin quick approve (all layers at once)
      */
     public function approve(Leave $leave)
     {
@@ -323,7 +323,7 @@ class LeaveController extends Controller
     }
 
     /**
-     * Legacy reject — for super_admin
+     * Legacy reject - for super_admin
      */
     public function reject(Request $request, Leave $leave)
     {

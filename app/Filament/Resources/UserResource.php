@@ -95,11 +95,11 @@ class UserResource extends Resource
                 Tables\Columns\TextColumn::make('division')
                     ->label('Divisi')
                     ->searchable()
-                    ->placeholder('—'),
+                    ->placeholder('-'),
                 Tables\Columns\TextColumn::make('position')
                     ->label('Jabatan')
                     ->searchable()
-                    ->placeholder('—')
+                    ->placeholder('-')
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('roles.name')
                     ->searchable(),
