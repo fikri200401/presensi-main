@@ -10,6 +10,8 @@ use App\Imports\AttendanceImport;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 
 class AttendanceController extends Controller
 {
@@ -47,62 +49,123 @@ class AttendanceController extends Controller
 
     public function create()
     {
-        $users = User::all();
-        $schedules = Schedule::with(['shift', 'office'])->get();
-        return view('attendance.create', compact('users', 'schedules'));
+        $users = User::whereHas('schedule.shift')
+            ->whereHas('schedule.office')
+            ->with(['schedule.shift', 'schedule.office'])
+            ->orderBy('name')
+            ->get();
+
+        return view('attendance.create', compact('users'));
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
             'user_id' => 'required|exists:users,id',
-            'schedule_id' => 'required|exists:schedules,id',
-            'schedule_latitude' => 'required|numeric',
-            'schedule_longitude' => 'required|numeric',
-            'schedule_start_time' => 'required',
-            'schedule_end_time' => 'required',
-            'start_latitude' => 'nullable|numeric',
-            'start_longitude' => 'nullable|numeric',
-            'end_latitude' => 'nullable|numeric',
-            'end_longitude' => 'nullable|numeric',
-            'start_time' => 'nullable',
-            'end_time' => 'nullable',
+            'date' => [
+                'required',
+                'date',
+                Rule::unique('attendances', 'date')
+                    ->where(fn ($query) => $query
+                        ->where('user_id', $request->input('user_id'))
+                        ->whereNull('deleted_at')),
+            ],
+            'start_time' => 'required|date_format:H:i',
+            'end_time' => 'nullable|date_format:H:i',
+        ], [
+            'date.unique' => 'Absensi karyawan pada tanggal tersebut sudah tercatat.',
+            'start_time.required' => 'Jam masuk wajib diisi.',
         ]);
 
-        $validated['date'] = now()->format('Y-m-d');
+        $schedule = $this->scheduleForUser((int) $validated['user_id']);
 
-        Attendance::create($validated);
+        Attendance::create($this->manualAttendancePayload($validated, $schedule));
 
-        return redirect()->route('attendance.index')->with('success', 'Attendance created successfully');
+        return redirect()->route('attendance.index')->with('success', 'Absensi manual berhasil disimpan.');
     }
 
     public function edit(Attendance $attendance)
     {
-        $users = User::all();
-        $schedules = Schedule::with(['shift', 'office'])->get();
-        return view('attendance.edit', compact('attendance', 'users', 'schedules'));
+        $users = User::whereHas('schedule.shift')
+            ->whereHas('schedule.office')
+            ->with(['schedule.shift', 'schedule.office'])
+            ->orderBy('name')
+            ->get();
+
+        return view('attendance.edit', compact('attendance', 'users'));
     }
 
     public function update(Request $request, Attendance $attendance)
     {
         $validated = $request->validate([
             'user_id' => 'required|exists:users,id',
-            'schedule_id' => 'required|exists:schedules,id',
-            'schedule_latitude' => 'required|numeric',
-            'schedule_longitude' => 'required|numeric',
-            'schedule_start_time' => 'required',
-            'schedule_end_time' => 'required',
-            'start_latitude' => 'nullable|numeric',
-            'start_longitude' => 'nullable|numeric',
-            'end_latitude' => 'nullable|numeric',
-            'end_longitude' => 'nullable|numeric',
-            'start_time' => 'nullable',
-            'end_time' => 'nullable',
+            'date' => [
+                'required',
+                'date',
+                Rule::unique('attendances', 'date')
+                    ->where(fn ($query) => $query
+                        ->where('user_id', $request->input('user_id'))
+                        ->whereNull('deleted_at'))
+                    ->ignore($attendance->id),
+            ],
+            'start_time' => 'required|date_format:H:i',
+            'end_time' => 'nullable|date_format:H:i',
+        ], [
+            'date.unique' => 'Absensi karyawan pada tanggal tersebut sudah tercatat.',
+            'start_time.required' => 'Jam masuk wajib diisi.',
         ]);
 
-        $attendance->update($validated);
+        $schedule = $this->scheduleForUser((int) $validated['user_id']);
+        $userChanged = (int) $attendance->user_id !== (int) $validated['user_id'];
+        $payload = $this->manualAttendancePayload($validated, $schedule);
 
-        return redirect()->route('attendance.index')->with('success', 'Attendance updated successfully');
+        // Koordinat aktual milik presensi GPS lama tetap dipertahankan. Jika
+        // karyawannya diganti, koordinat lama tidak lagi relevan.
+        if (!$userChanged) {
+            unset(
+                $payload['start_latitude'],
+                $payload['start_longitude'],
+                $payload['end_latitude'],
+                $payload['end_longitude'],
+            );
+        }
+
+        $attendance->update($payload);
+
+        return redirect()->route('attendance.index')->with('success', 'Absensi berhasil diperbarui.');
+    }
+
+    private function scheduleForUser(int $userId): Schedule
+    {
+        $schedule = Schedule::with(['shift', 'office'])
+            ->where('user_id', $userId)
+            ->first();
+
+        if (!$schedule || !$schedule->shift || !$schedule->office) {
+            throw ValidationException::withMessages([
+                'user_id' => 'Karyawan belum memiliki jadwal, shift, atau lokasi kantor yang lengkap.',
+            ]);
+        }
+
+        return $schedule;
+    }
+
+    private function manualAttendancePayload(array $validated, Schedule $schedule): array
+    {
+        return [
+            'user_id' => $validated['user_id'],
+            'date' => $validated['date'],
+            'schedule_latitude' => $schedule->office->latitude,
+            'schedule_longitude' => $schedule->office->longitude,
+            'schedule_start_time' => $schedule->shift->start_time,
+            'schedule_end_time' => $schedule->shift->end_time,
+            'start_latitude' => null,
+            'start_longitude' => null,
+            'end_latitude' => null,
+            'end_longitude' => null,
+            'start_time' => $validated['start_time'],
+            'end_time' => $validated['end_time'] ?? null,
+        ];
     }
 
     public function destroy(Attendance $attendance)
